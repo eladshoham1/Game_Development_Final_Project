@@ -4,12 +4,63 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject playerCamera;
+
+    private CharacterController controller;
+    private float speed = 3f;
+    private float gravity = 0.2f;
+    private float velocity = 0f;
+    private AudioSource footStepSound;
+    private Animator anim;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();
+        footStepSound = GetComponent<AudioSource>();
+        anim = GetComponent<Animator>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Vector3 prevPosition = this.transform.position;
+        float horizontal = Input.GetAxis("Horizontal") * speed;
+        float vertical = Input.GetAxis("Vertical") * speed;
+        playerCamera.transform.localEulerAngles = new Vector3(0, 0, 0);
+        transform.localEulerAngles = new Vector3(0, 0, 0);
+        controller.Move((Vector3.right * horizontal + Vector3.forward * vertical) * Time.deltaTime);
+
+        if (!controller.isGrounded)
+        {
+            velocity -= gravity * Time.deltaTime;
+            controller.Move(new Vector3(0, velocity, 0));
+        }
+        else
+            velocity = 0;
+
+        anim.SetBool("IsWalking", prevPosition != this.transform.position);
+        if (!footStepSound.isPlaying && controller.velocity.magnitude > 0.1f)
+            footStepSound.Play();
+    }
+}
+
+
+
+
+/*using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
     public AudioClip FootStepsSound;
     public AudioClip JumpSound;
     public AudioClip LandingSound;
 
     private Vector3 moveDir = Vector3.zero;
 
+    private Animator anim;
     private CharacterController controller;
     private AudioSource audioSource;
     private bool wasGrounded = false;
@@ -20,6 +71,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        anim = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
         audioSource = GetComponent<AudioSource>();
     }
@@ -37,10 +89,12 @@ public class PlayerController : MonoBehaviour
             moveDir = transform.TransformDirection(moveDir);
             if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W))
             {
+                anim.SetBool("IsWalking", true);
                 moveDir *= (speed * 1.5f);
             }
             else
             {
+                anim.SetBool("IsWalking", false);
                 moveDir *= speed;
             }
 
@@ -102,4 +156,4 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-}
+}*/
