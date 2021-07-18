@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
+            sound.Stop();
             sound.clip = jump;
             sound.Play();
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);

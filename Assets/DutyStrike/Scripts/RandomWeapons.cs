@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class RandomWeapons : MonoBehaviour
 {
-    public GameObject weapons;
-
     Vector3 GetRandomPositin()
     {
-        float x = Random.Range(-10, 100);
-        float z = Random.Range(-40, 40);
+        float x = Random.Range(-20, 145);
+        float z = Random.Range(-65, 50);
 
         return new Vector3(x, 0, z);
     }
@@ -17,8 +15,8 @@ public class RandomWeapons : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < weapons.transform.childCount; i++)
-            weapons.transform.GetChild(i).transform.position = GetRandomPositin();
+        for (int i = 0; i < this.transform.childCount; i++)
+            this.transform.GetChild(i).transform.position = GetRandomPositin();
     }
 
     // Update is called once per frame
