@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
     public Transform groundCheck;
+    public GameObject npc;
+    public GameObject npc1;
+    public GameObject npc2;
     public AudioClip footStep;
     public AudioClip jump;
     public AudioClip land;
@@ -48,6 +52,10 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(move*speed*Time.deltaTime);
 
+        startNPC(npc);
+        startNPC(npc1);
+        startNPC(npc2);
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             sound.clip = jump;
@@ -73,6 +81,21 @@ public class PlayerController : MonoBehaviour
         if (!sound.isPlaying && anim.GetBool("IsWalking"))
         {
             sound.Play();
+        }
+    }
+
+    void startNPC(GameObject idle)
+    {
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            NavMeshAgent nma = idle.GetComponent<NavMeshAgent>();
+            Animator an = idle.GetComponent<Animator>();
+
+            if (!nma.enabled && an.GetInteger("NPCState") != 2)
+            {
+                nma.enabled = true;
+                an.SetInteger("NPCState", 1);
+            }
         }
     }
 }
