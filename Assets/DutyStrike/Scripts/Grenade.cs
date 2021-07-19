@@ -12,6 +12,7 @@ public class Grenade : MonoBehaviour
     private float radius = 5f;
     private float force = 200f;
     private float countdown;
+    private bool throwGrenade;
     private bool hasExploded;
     
     // Start is called before the first frame update
@@ -19,20 +20,34 @@ public class Grenade : MonoBehaviour
     {
         sound = soundObject.GetComponent<AudioSource>();
         countdown = delay;
+        throwGrenade = false;
         hasExploded = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        countdown -= Time.deltaTime;
-
-        if (countdown <= 0f && !hasExploded)
+        if (throwGrenade)
         {
-            sound.Play();
-            explode();
-            hasExploded = true;
+            countdown -= Time.deltaTime;
+
+            if (countdown <= 0f && !hasExploded)
+            {
+                sound.Play();
+                explode();
+                hasExploded = true;
+            }
         }
+    }
+
+    public bool GetThrowGrenade()
+    {
+        return this.throwGrenade;
+    }
+
+    public void SetThrowGrenade(bool throwGrenade)
+    {
+        this.throwGrenade = throwGrenade;
     }
 
     void explode()
