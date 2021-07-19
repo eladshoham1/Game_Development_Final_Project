@@ -16,9 +16,10 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundMask;
 
     private CharacterController controller;
-    private float speed = 7f;
+    private float speed = 2.5f;
     private float gravity = -9.81f;
     private float jumpHeight = 1f;
+    private float currentSpeed = 0f;
 
     private Vector3 velocity;
     private bool isGrounded;
@@ -40,7 +41,7 @@ public class PlayerController : MonoBehaviour
         Vector3 prevPosition = this.transform.position;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        if(isGrounded && velocity.y < 0)
+        if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
@@ -50,7 +51,12 @@ public class PlayerController : MonoBehaviour
 
         Vector3 move = transform.right * x + transform.forward * z;
 
-        controller.Move(move*speed*Time.deltaTime);
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W))
+            currentSpeed = speed * 2f;
+        else
+            currentSpeed = speed;
+
+        controller.Move(move* currentSpeed * Time.deltaTime);
 
         startNPC(npc);
         startNPC(npc1);
