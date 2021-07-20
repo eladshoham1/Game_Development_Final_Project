@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ShowHour : MonoBehaviour
 {
-    public Text hourText;
+    public TextMeshProUGUI hourText;
     private Animator anim;
 
     // Start is called before the first frame update
@@ -23,6 +24,6 @@ public class ShowHour : MonoBehaviour
         float hour = min / 60;
         min %= 60;
         hour %= 24;
-        hourText.GetComponent<Text>().text = (hour < 10 ? "0" : "") + (int)hour + ":" + (min < 10 ? "0" : "") + (int)min;
+        hourText.GetComponent<TextMeshProUGUI>().text = (hour < 10 ? "0" : "") + (int)hour + ":" + (min < 10 ? "0" : "") + (int)min;
     }
 }

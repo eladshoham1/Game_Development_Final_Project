@@ -6,46 +6,45 @@ using UnityEngine.UI;
 public class GrenadeThrower : MonoBehaviour
 {
     public float throwForce = 15f;
-    public GameObject grenadesInHand;
-    public Text grenadesCountText;
+    public GameObject theGrenade;
+    public Slider greandeTime;
 
-    private int grenadesCount;
+    private bool haveGrenade;
+    private float delay;
 
     private void Start()
     {
-        grenadesCount = 0;
+        haveGrenade = false;
+        delay = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        GameObject grenade = null;
-
-        for (int i = 0; !grenade && i < grenadesInHand.transform.childCount; i++)
+        if (haveGrenade && delay >= 4f && Input.GetButtonDown("ThrowGrenade"))
         {
-            GameObject currentGrenade = grenadesInHand.transform.GetChild(i).gameObject;
-
-            if (currentGrenade.activeInHierarchy && !currentGrenade.GetComponent<Grenade>().GetThrowGrenade())
-                grenade = currentGrenade;
+            throwGrenade();
+            delay = 0f;
         }
 
-        if (grenade && Input.GetButtonDown("ThrowGrenade"))
-        {
-            throwGrenade(grenade);
-            grenade.GetComponent<Grenade>().SetThrowGrenade(true);
-        }
+        delay += Time.deltaTime;
+        greandeTime.value = delay;
     }
 
-    void throwGrenade(GameObject thegGrenade)
+    public bool GetHaveGrenade()
     {
-        GameObject grenade = Instantiate(thegGrenade, transform.position, transform.rotation);
+        return this.haveGrenade;
+    }
+
+    public void SetHaveGrenade(bool haveGrenade)
+    {
+        this.haveGrenade = haveGrenade;
+    }
+
+    void throwGrenade()
+    {
+        GameObject grenade = Instantiate(theGrenade, transform.position, transform.rotation);
         Rigidbody rb = grenade.GetComponent<Rigidbody>();
         rb.AddForce(transform.forward * throwForce, ForceMode.VelocityChange);
-
-        if (this.gameObject.tag == "Player")
-        {
-            grenadesCount = int.Parse(grenadesCountText.GetComponent<Text>().text) - 1;
-            grenadesCountText.GetComponent<Text>().text = grenadesCount.ToString();
-        }
     }
 }

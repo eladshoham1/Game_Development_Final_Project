@@ -98,10 +98,10 @@ public class PlayerController : MonoBehaviour
             NavMeshAgent nma = idle.GetComponent<NavMeshAgent>();
             Animator an = idle.GetComponent<Animator>();
 
-            if (!nma.enabled && an.GetInteger("NPCState") != 2)
+            if (!nma.enabled && an.GetInteger("NPCState") != 4)
             {
                 nma.enabled = true;
-                an.SetInteger("NPCState", 1);
+                an.SetInteger("NPCState", 2);
             }
         }
     }

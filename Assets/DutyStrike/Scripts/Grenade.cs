@@ -5,49 +5,34 @@ using UnityEngine;
 public class Grenade : MonoBehaviour
 {
     public GameObject explpsionEffect;
-    public GameObject soundObject;
+    //public GameObject soundObject;
 
-    private AudioSource sound;
+    //private AudioSource sound;
     private float delay = 3f;
     private float radius = 5f;
     private float force = 200f;
     private float countdown;
-    private bool throwGrenade;
     private bool hasExploded;
     
     // Start is called before the first frame update
     void Start()
     {
-        sound = soundObject.GetComponent<AudioSource>();
+        //sound = soundObject.GetComponent<AudioSource>();
         countdown = delay;
-        throwGrenade = false;
         hasExploded = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (throwGrenade)
+        countdown -= Time.deltaTime;
+
+        if (countdown <= 0f && !hasExploded)
         {
-            countdown -= Time.deltaTime;
-
-            if (countdown <= 0f && !hasExploded)
-            {
-                sound.Play();
-                explode();
-                hasExploded = true;
-            }
+            //sound.Play();
+            explode();
+            hasExploded = true;
         }
-    }
-
-    public bool GetThrowGrenade()
-    {
-        return this.throwGrenade;
-    }
-
-    public void SetThrowGrenade(bool throwGrenade)
-    {
-        this.throwGrenade = throwGrenade;
     }
 
     void explode()

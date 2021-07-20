@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PickGun : MonoBehaviour
 {
     public GameObject weaponsInField;
     public GameObject pickGunText;
+    public GameObject target;
     public Sprite gun;
     public Image weaponImage;
 
@@ -29,6 +31,7 @@ public class PickGun : MonoBehaviour
         {
             TakeWeapon();
             weaponImage.sprite = gun;
+            target.SetActive(true);
         }
     }
 
@@ -38,7 +41,7 @@ public class PickGun : MonoBehaviour
 
         if (other.tag == "Player")
         {
-            pickGunText.GetComponentInChildren<Text>().text = "Press F To Pick " + this.gameObject.tag;
+            pickGunText.GetComponentInChildren<TextMeshProUGUI>().text = "Press F To Pick " + this.gameObject.tag;
             pickGunText.SetActive(true);
             tagOnTrigger = other.tag;
 
