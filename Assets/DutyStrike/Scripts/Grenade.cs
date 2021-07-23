@@ -5,9 +5,9 @@ using UnityEngine;
 public class Grenade : MonoBehaviour
 {
     public GameObject explpsionEffect;
-    //public GameObject soundObject;
+    public GameObject soundObject;
 
-    //private AudioSource sound;
+    private AudioSource sound;
     private float delay = 3f;
     private float radius = 5f;
     private float force = 200f;
@@ -17,7 +17,7 @@ public class Grenade : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //sound = soundObject.GetComponent<AudioSource>();
+        sound = soundObject.GetComponent<AudioSource>();
         countdown = delay;
         hasExploded = false;
     }
@@ -29,7 +29,6 @@ public class Grenade : MonoBehaviour
 
         if (countdown <= 0f && !hasExploded)
         {
-            //sound.Play();
             explode();
             hasExploded = true;
         }
@@ -37,6 +36,7 @@ public class Grenade : MonoBehaviour
 
     void explode()
     {
+        sound.Play();
         Instantiate(explpsionEffect, transform.position, transform.rotation);
 
         Collider[] collidersToDestroy = Physics.OverlapSphere(transform.position, radius);

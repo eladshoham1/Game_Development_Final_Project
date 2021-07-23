@@ -84,7 +84,23 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(velocity * Time.deltaTime);
 
-        anim.SetBool("IsWalking", prevPosition != this.transform.position);
+        if (prevPosition != this.transform.position)
+        {
+            bool haveWeapon = false;
+            GameObject weaponsInHand = this.transform.Find("Camera").gameObject.transform.Find("WeaponsInHand").gameObject;
+
+            for (int i = 0; !haveWeapon && i < weaponsInHand.transform.childCount; i++)
+            {
+                if (weaponsInHand.transform.GetChild(i).gameObject.activeInHierarchy)
+                {
+                    anim.SetInteger("State", 3);
+                    haveWeapon = true;
+                }
+            }
+
+            if (!haveWeapon)
+                anim.SetInteger("State", 2);
+        }
         if (!sound.isPlaying && anim.GetBool("IsWalking"))
         {
             sound.Play();

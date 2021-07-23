@@ -57,6 +57,10 @@ public class PickGun : MonoBehaviour
         else if (other.tag == "NPC")
         {
             weaponsInHand = FindWeaponsInHand(other.gameObject);
+
+            if (!weaponsInHand)
+                return;
+
             for (int i = 0; i < weaponsInHand.transform.childCount; i++)
             {
                 if (!npcTakeWeapon)
@@ -73,6 +77,7 @@ public class PickGun : MonoBehaviour
         pickGunText.SetActive(false);
         weaponsInHand = null;
         tagOnTrigger = null;
+        npcTakeWeapon = false;
     }
 
     GameObject FindWeaponsInHand(GameObject theObject)
