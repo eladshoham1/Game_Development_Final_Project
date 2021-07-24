@@ -101,9 +101,9 @@ public class PlayerController : MonoBehaviour
             if (!haveWeapon)
                 anim.SetInteger("State", 2);
         }
-        if (!sound.isPlaying && anim.GetBool("IsWalking"))
+        if (!sound.isPlaying && (anim.GetInteger("State") == 2 || anim.GetInteger("State") == 3))
         {
-            sound.Play();
+            //sound.Play();
         }
     }
 
