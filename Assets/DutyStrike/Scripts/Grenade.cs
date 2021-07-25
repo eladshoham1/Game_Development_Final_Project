@@ -39,6 +39,10 @@ public class Grenade : MonoBehaviour
 
         foreach (Collider nearbyObject in collidersToDestroy)
         {
+            if (nearbyObject.tag == "Player")
+            {
+                nearbyObject.GetComponent<Stats>().HurtFromGrenade();
+            }
             Destructible dest = nearbyObject.GetComponent<Destructible>();
             if (dest != null)
             {

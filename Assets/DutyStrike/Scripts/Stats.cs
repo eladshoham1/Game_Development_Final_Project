@@ -6,6 +6,12 @@ using TMPro;
 public class Stats : MonoBehaviour
 {
     public TextMeshProUGUI hpText;
+    public GameObject playerMessage;
+    public GameObject teammate;
+    public GameObject statusCanvas;
+    public GameObject gameoverCanvas;
+    public MouseLook cameraLook;
+
 
     private float hp;
     private bool dead;
@@ -21,8 +27,6 @@ public class Stats : MonoBehaviour
     {
         if (this.gameObject.tag == "Player")
             hpText.GetComponent<TextMeshProUGUI>().text = this.hp.ToString();
-
-        IncreaseHP(0.1f);
     }
 
     public float GetHP()
@@ -45,14 +49,19 @@ public class Stats : MonoBehaviour
         this.dead = dead;
     }
 
-    public void HeadShot()
+    public void HeadShot(string shooter)
     {
-        DicreaseHP(100f);
+        DicreaseHP(100f,shooter);
     }
 
-    public void BodyShot()
+    public void BodyShot(string shooter)
     {
-        DicreaseHP(25f);
+        DicreaseHP(Random.Range(20, 30),shooter);
+    }
+
+    public void HurtFromGrenade()
+    {
+        DicreaseHP(Random.Range(60, 80),"Grenade");
     }
 
     private void IncreaseHP(float hp)
@@ -63,13 +72,29 @@ public class Stats : MonoBehaviour
             this.hp = 100f;
     }
 
-    private void DicreaseHP(float hp)
+
+    private void DicreaseHP(float hp, string shooter)
     {
         this.hp -= hp;
 
         if (this.hp <= 0f)
         {
             this.hp = 0f;
+            if(teammate.GetComponent<Stats>().IsDead())
+            {
+                statusCanvas.SetActive(false);
+                gameoverCanvas.SetActive(true);
+                cameraLook.enabled = false;
+                Cursor.lockState = CursorLockMode.None;
+                Time.timeScale = 0f;
+                if (this.tag == "Player" || teammate.tag == "Player")
+                    gameoverCanvas.transform.Find("Winner Status").GetComponent<TextMeshProUGUI>().text = "You're Lost GG WP";
+                else
+                    gameoverCanvas.transform.Find("Winner Status").GetComponent<TextMeshProUGUI>().text = "You're WIN!!!";
+            }
+
+            playerMessage.GetComponentInChildren<TextMeshProUGUI>().text = shooter + " kill " + this.transform.name;
+            playerMessage.SetActive(true);
             SetDead(true);
         }
     }

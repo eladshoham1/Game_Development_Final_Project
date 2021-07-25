@@ -64,10 +64,10 @@ public class GunShooting : MonoBehaviour
         switch (type)
         {
             case "Head":
-                stats.HeadShot();
+                stats.HeadShot(this.transform.parent.name);
                 break;
             case "Body":
-                stats.BodyShot();
+                stats.BodyShot(this.transform.parent.name);
                 break;
             default:
                 break;
