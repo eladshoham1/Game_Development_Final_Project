@@ -20,7 +20,10 @@ public class NPCBehaviour : MonoBehaviour
         anim = GetComponent<Animator>();
         anim.SetInteger("NPCState", 0);
         agent = GetComponent<NavMeshAgent>();
-        agent.enabled = false;
+        //agent.enabled = false;
+
+        dest = new Vector3(80f, 1f, 90f);
+        agent.SetDestination(dest);
 
         GetFieldSize();
     }
@@ -28,13 +31,13 @@ public class NPCBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (agent.enabled)
+        /*if (agent.enabled)
         {
             if (agent.transform.position == dest)
             {
                 SetAgentDest();
             }
-        }
+        }*/
     }
 
     private void GetFieldSize()

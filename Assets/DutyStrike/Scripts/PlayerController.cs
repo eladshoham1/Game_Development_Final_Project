@@ -38,6 +38,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GetComponent<Stats>().IsDead())
+            return;
+
         Vector3 prevPosition = this.transform.position;
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
@@ -84,30 +87,14 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(velocity * Time.deltaTime);
 
-        if (prevPosition != this.transform.position)
+        anim.SetInteger("NPCState", prevPosition == this.transform.position ? 0 : 1);
+        if (!sound.isPlaying && anim.GetInteger("NPCState") == 1)
         {
-            bool haveWeapon = false;
-            GameObject weaponsInHand = this.transform.Find("Camera").gameObject.transform.Find("WeaponsInHand").gameObject;
-
-            for (int i = 0; !haveWeapon && i < weaponsInHand.transform.childCount; i++)
-            {
-                if (weaponsInHand.transform.GetChild(i).gameObject.activeInHierarchy)
-                {
-                    anim.SetInteger("State", 3);
-                    haveWeapon = true;
-                }
-            }
-
-            if (!haveWeapon)
-                anim.SetInteger("State", 2);
-        }
-        if (!sound.isPlaying && (anim.GetInteger("State") == 2 || anim.GetInteger("State") == 3))
-        {
-            //sound.Play();
+            sound.Play();
         }
     }
 
-    void startNPC(GameObject idle)
+    private void startNPC(GameObject idle)
     {
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {

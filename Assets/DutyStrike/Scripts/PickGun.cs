@@ -38,29 +38,19 @@ public class PickGun : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         tagOnTrigger = null;
+        weaponsInHand = FindWeaponsInHand(other.gameObject);
+
+        if (!weaponsInHand)
+            return;
 
         if (other.tag == "Player")
         {
             pickGunText.GetComponentInChildren<TextMeshProUGUI>().text = "Press F To Pick " + this.gameObject.tag;
             pickGunText.SetActive(true);
             tagOnTrigger = other.tag;
-
-            for (int i = 0; i < other.transform.childCount; i++)
-            {
-                if (other.transform.GetChild(i).gameObject.name == "Camera")
-                {
-                    weaponsInHand = FindWeaponsInHand(other.transform.GetChild(i).gameObject);
-                    break;
-                }
-            }
         }
         else if (other.tag == "NPC")
         {
-            weaponsInHand = FindWeaponsInHand(other.gameObject);
-
-            if (!weaponsInHand)
-                return;
-
             for (int i = 0; i < weaponsInHand.transform.childCount; i++)
             {
                 if (!npcTakeWeapon)
@@ -82,10 +72,24 @@ public class PickGun : MonoBehaviour
 
     GameObject FindWeaponsInHand(GameObject theObject)
     {
+        GameObject camera = null;
+
         for (int i = 0; i < theObject.transform.childCount; i++)
         {
-            if (theObject.transform.GetChild(i).gameObject.name == "WeaponsInHand")
-                return theObject.transform.GetChild(i).gameObject;
+            if (theObject.transform.GetChild(i).gameObject.name == "Camera")
+            {
+                camera = theObject.transform.GetChild(i).gameObject;
+                break;
+            }
+        }
+
+        if (!camera)
+            return null;
+
+        for (int i = 0; i < camera.transform.childCount; i++)
+        {
+            if (camera.transform.GetChild(i).gameObject.name == "WeaponsInHand")
+                return camera.transform.GetChild(i).gameObject;
         }
 
         return null;

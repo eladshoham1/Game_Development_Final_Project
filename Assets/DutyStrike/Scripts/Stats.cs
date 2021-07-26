@@ -6,56 +6,35 @@ using TMPro;
 public class Stats : MonoBehaviour
 {
     public TextMeshProUGUI hpText;
-    public GameObject playerMessage;
-    public GameObject teammate;
-    public GameObject statusCanvas;
-    public GameObject gameoverCanvas;
-    public MouseLook cameraLook;
     public TextMeshProUGUI firstAidCountText;
+    public GameObject playerMessage;
 
-    protected float hp;
-    protected int numOfFirstAids;
-    protected bool dead;
-
+    private Animator anim;
+    private float hp;
+    private int numOfFirstAids;
+    private bool dead;
     private bool deadNow;
     private float delay;
 
-    // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
         hp = 100f;
         numOfFirstAids = 0;
         dead = false;
-        deadNow = false;
-        delay = 0f;
     }
 
     private void Update()
     {
-        if (this.gameObject.tag == "Player")
-        {
-            hpText.GetComponent<TextMeshProUGUI>().text = this.hp.ToString();
+        PrintMessage();
 
+        if (this.tag == "Player")
+        {
             if (Input.GetButtonDown("FirstAid"))
                 UseFirstAid();
         }
-        else if (this.gameObject.tag == "NPC")
-        {
-            if (this.gameObject.GetComponent<Stats>().GetHP() < 50f)
-                UseFirstAid();
-        }
-
-        if (deadNow)
-        {
-            delay += Time.deltaTime;
-
-            if (delay >= 5f)
-            {
-                playerMessage.SetActive(false);
-                deadNow = false;
-                delay = 0f;
-            }
-        }
+        else if (this.gameObject.GetComponent<Stats>().GetHP() < 50f)
+            UseFirstAid();
     }
 
     public float GetHP()
@@ -65,7 +44,22 @@ public class Stats : MonoBehaviour
 
     public void SetHP(float hp)
     {
-        this.hp = hp;
+        if (hp >= 100f)
+        {
+            this.hp = 100f;
+        }
+        else if (hp < 0f)
+        {
+            this.hp = 0f;
+            SetDead(true);
+        }
+        else
+        {
+            this.hp = hp;
+        }
+
+        if (this.tag == "Player")
+            hpText.GetComponent<TextMeshProUGUI>().text = this.hp.ToString();
     }
 
     public int GetNumOfFirstAid()
@@ -76,7 +70,9 @@ public class Stats : MonoBehaviour
     public void setNumOfFirstAid(int numOfFirstAids)
     {
         this.numOfFirstAids = numOfFirstAids;
-        firstAidCountText.GetComponent<TextMeshProUGUI>().text = this.numOfFirstAids.ToString();
+
+        if (this.tag == "Player")
+            firstAidCountText.GetComponent<TextMeshProUGUI>().text = this.numOfFirstAids.ToString();
     }
 
     public bool IsDead()
@@ -87,6 +83,9 @@ public class Stats : MonoBehaviour
     public void SetDead(bool dead)
     {
         this.dead = dead;
+
+        if (this.dead)
+            anim.SetInteger("NPCState", 4);
     }
 
     public void AddFirstAid()
@@ -103,14 +102,9 @@ public class Stats : MonoBehaviour
         }
     }
 
-    public void HeadShot(string shooter)
+    public void Shot(string shooter)
     {
-        DicreaseHP(100f,shooter);
-    }
-
-    public void BodyShot(string shooter)
-    {
-        DicreaseHP(Random.Range(20, 30),shooter);
+        DicreaseHP(Random.Range(20, 60), shooter);
     }
 
     public void HurtFromGrenade()
@@ -120,42 +114,37 @@ public class Stats : MonoBehaviour
 
     private void IncreaseHP(float hp)
     {
-        this.hp += hp;
-
-        if (this.hp >= 100f)
-            this.hp = 100f;
+        SetHP(this.hp + hp);
     }
 
     private void DicreaseHP(float hp, string shooter)
     {
-        this.hp -= hp;
+        SetHP(this.hp - hp);
+        PlayerKilled(shooter);
+    }
 
-        if (this.hp <= 0f)
+    private void PrintMessage()
+    {
+        if (deadNow)
         {
-            this.hp = 0f;
-            SetDead(true);
-            checkGameOver(shooter);
+            delay += Time.deltaTime;
+
+            if (delay >= 5f)
+            {
+                playerMessage.SetActive(false);
+                deadNow = false;
+                delay = 0f;
+            }
         }
     }
 
-    private void checkGameOver(string shooter)
+    private void PlayerKilled(string shooter)
     {
-        if (teammate.GetComponent<Stats>().IsDead())
+        if (this.IsDead())
         {
-            statusCanvas.SetActive(false);
-            gameoverCanvas.SetActive(true);
-            cameraLook.enabled = false;
-            Cursor.lockState = CursorLockMode.None;
-            Time.timeScale = 0f;
-
-            if (this.tag == "Player" || teammate.tag == "Player")
-                gameoverCanvas.transform.Find("Winner Status").GetComponent<TextMeshProUGUI>().text = "You're Lost GG WP";
-            else
-                gameoverCanvas.transform.Find("Winner Status").GetComponent<TextMeshProUGUI>().text = "You're WIN!!!";
+            playerMessage.GetComponentInChildren<TextMeshProUGUI>().text = shooter + " kill " + this.transform.name;
+            playerMessage.SetActive(true);
+            deadNow = true;
         }
-
-        playerMessage.GetComponentInChildren<TextMeshProUGUI>().text = shooter + " kill " + this.transform.name;
-        playerMessage.SetActive(true);
-        deadNow = true;
     }
 }
