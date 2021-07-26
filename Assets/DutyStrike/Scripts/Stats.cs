@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using TMPro;
 
 public class Stats : MonoBehaviour
@@ -16,12 +17,17 @@ public class Stats : MonoBehaviour
     private bool deadNow;
     private float delay;
 
+    private NavMeshAgent nma;
+
     void Start()
     {
         anim = GetComponent<Animator>();
         hp = 100f;
         numOfFirstAids = 0;
         dead = false;
+
+        if (this.gameObject.tag == "NPC")
+            nma = GetComponent<NavMeshAgent>();
     }
 
     private void Update()
@@ -85,7 +91,12 @@ public class Stats : MonoBehaviour
         this.dead = dead;
 
         if (this.dead)
+        {
             anim.SetInteger("NPCState", 4);
+
+            if (this.gameObject.tag == "NPC")
+                nma.enabled = false;
+        }
     }
 
     public void AddFirstAid()
