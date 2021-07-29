@@ -61,10 +61,6 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(move* currentSpeed * Time.deltaTime);
 
-        startNPC(npc);
-        startNPC(npc1);
-        startNPC(npc2);
-
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             sound.Stop();
@@ -91,6 +87,13 @@ public class PlayerController : MonoBehaviour
         if (!sound.isPlaying && anim.GetInteger("NPCState") == 1)
         {
             sound.Play();
+        }
+
+        if (!npc.GetComponent<NavMeshAgent>().enabled)
+        {
+            startNPC(npc);
+            startNPC(npc1);
+            startNPC(npc2);
         }
     }
 

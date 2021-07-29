@@ -96,6 +96,26 @@ public class Stats : MonoBehaviour
 
             if (this.gameObject.tag == "NPC")
                 nma.enabled = false;
+
+            for (int i = 0; i < this.gameObject.transform.childCount; i++)
+            {
+                if (this.gameObject.transform.GetChild(i).gameObject.name == "Camera")
+                {
+                    GameObject camera = this.gameObject.transform.GetChild(i).gameObject;
+
+                    for (int j = 0; j < camera.transform.childCount; j++)
+                    {
+                        if (camera.transform.GetChild(j).gameObject.name == "WeaponsInHand")
+                        {
+                            GameObject weaponsInHand = camera.transform.GetChild(j).gameObject;
+
+                            for (int h = 0; h < weaponsInHand.transform.childCount; h++)
+                                weaponsInHand.transform.GetChild(h).gameObject.SetActive(false);
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -120,9 +140,7 @@ public class Stats : MonoBehaviour
 
     public void HurtFromGrenade()
     {
-        Debug.Log("kaki");
         DicreaseHP(Random.Range(60, 80), "Grenade");
-        Debug.Log(this.hp);
     }
 
     private void IncreaseHP(float hp)

@@ -5,6 +5,11 @@ using UnityEngine.AI;
 
 public class NPCBehaviour : MonoBehaviour
 {
+    public GameObject playerTeam;
+    public GameObject aCamera;
+    public GameObject weaponsInHand;
+    public GameObject npc;
+
     private Animator anim;
     private NavMeshAgent agent;
 
@@ -33,6 +38,32 @@ public class NPCBehaviour : MonoBehaviour
         {
             if (agent.transform.position == dest)
                 SetAgentDest();
+
+            for (int i = 0; i < weaponsInHand.transform.childCount; i++)
+            {
+                if (weaponsInHand.transform.GetChild(i).gameObject.activeInHierarchy)
+                {
+                    for (int j = 0; j < playerTeam.transform.childCount; j++)
+                    {
+
+                        if (Vector3.Distance(this.gameObject.transform.position, playerTeam.transform.GetChild(j).gameObject.transform.position) < 50f)
+                        {
+                            RaycastHit hit;
+
+                            if (Physics.Raycast(aCamera.transform.position, aCamera.transform.forward, out hit))
+                            {
+                                Debug.Log(hit.transform.gameObject.tag);
+                                if (hit.transform.gameObject.tag == "Player" || hit.transform.gameObject.tag == "NPC")
+                                {
+                                    if (this.transform.parent.parent.parent.parent.name != hit.transform.parent.name)
+                                        hit.transform.gameObject.GetComponent<Stats>().Shot(this.transform.parent.tag);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
         }
     }
 

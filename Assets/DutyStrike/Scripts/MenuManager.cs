@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
@@ -94,6 +95,11 @@ public class MenuManager : MonoBehaviour
     public void Resolution(int r)
     {
         Screen.SetResolution(rsl[r].width, rsl[r].height, isFullScreen);
+    }
+
+    public void PlayAgain()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
     public void Exit()

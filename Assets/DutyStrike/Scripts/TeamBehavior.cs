@@ -11,11 +11,13 @@ public class TeamBehavior : MonoBehaviour
     public MouseLook cameraLook;
 
     private GameObject[] npcs;
+    private float delay;
 
     // Start is called before the first frame update
     void Start()
     {
         npcs = new GameObject[this.transform.childCount];
+        delay = 0f;
 
         for (int i = 0; i < this.transform.childCount; i++)
             npcs[i] = this.transform.GetChild(i).gameObject;
@@ -30,8 +32,15 @@ public class TeamBehavior : MonoBehaviour
     private void GameOver()
     {
         if (CheckGameOver())
+            delay += Time.deltaTime;
+
+        if (delay >= 2f)
         {
-            winnerStatus.GetComponent<TextMeshProUGUI>().text = this.name + " lost";
+            if (this.name == "PlayerTeam")
+                winnerStatus.GetComponent<TextMeshProUGUI>().text = "You Lost";
+            else
+                winnerStatus.GetComponent<TextMeshProUGUI>().text = "You Win";
+
             statusCanvas.SetActive(false);
             gameoverCanvas.SetActive(true);
             cameraLook.enabled = false;
