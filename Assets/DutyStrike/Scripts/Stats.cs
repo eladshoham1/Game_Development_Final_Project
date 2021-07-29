@@ -120,7 +120,9 @@ public class Stats : MonoBehaviour
 
     public void HurtFromGrenade()
     {
+        Debug.Log("kaki");
         DicreaseHP(Random.Range(60, 80), "Grenade");
+        Debug.Log(this.hp);
     }
 
     private void IncreaseHP(float hp)
@@ -130,8 +132,11 @@ public class Stats : MonoBehaviour
 
     private void DicreaseHP(float hp, string shooter)
     {
-        SetHP(this.hp - hp);
-        PlayerKilled(shooter);
+        if (!dead)
+        {
+            SetHP(this.hp - hp);
+            PlayerKilled(shooter);
+        }
     }
 
     private void PrintMessage()

@@ -52,7 +52,7 @@ public class NPCBehaviour : MonoBehaviour
         float x = Random.Range(minX, maxX);
         float z = Random.Range(minZ, maxZ);
 
-        dest = new Vector3(x, 0f, z);
+        dest = new Vector3(x, this.transform.position.y, z);
         agent.SetDestination(dest);
     }
 }
