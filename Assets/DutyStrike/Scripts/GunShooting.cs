@@ -27,7 +27,7 @@ public class GunShooting : MonoBehaviour
             {
                 StartCoroutine(ShowShot());
 
-                if (hit.transform.gameObject.tag == "Player" || hit.transform.gameObject.tag == "NPC")
+                if (hit.transform.tag == "Player" || hit.transform.tag == "NPC")
                 {
                     if (this.transform.parent.parent.parent.parent.name != hit.transform.parent.name)
                         hit.transform.gameObject.GetComponent<Stats>().Shot(this.transform.parent.tag);
