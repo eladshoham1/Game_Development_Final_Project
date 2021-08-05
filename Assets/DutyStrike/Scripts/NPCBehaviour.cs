@@ -9,6 +9,7 @@ public class NPCBehaviour : MonoBehaviour
     //public GameObject aCamera;
     //public GameObject weaponsInHand;
     //public GameObject npc;
+    public GameObject player;
     public GameObject leader;
     public GameObject target;
 
@@ -19,9 +20,8 @@ public class NPCBehaviour : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        anim.SetInteger("NPCState", 0);
+        anim.SetInteger("NPCState", 2);
         agent = GetComponent<NavMeshAgent>();
-        agent.enabled = false;
     }
 
     // Update is called once per frame

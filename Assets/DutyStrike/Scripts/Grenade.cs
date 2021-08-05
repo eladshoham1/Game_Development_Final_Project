@@ -7,8 +7,8 @@ public class Grenade : MonoBehaviour
     public GameObject explpsionEffect;
 
     private float delay = 3f;
-    private float radius = 5f;
-    private float force = 200f;
+    private float radius = 7f;
+    private float force = 800f;
     private float countdown;
     private bool hasExploded;
     
