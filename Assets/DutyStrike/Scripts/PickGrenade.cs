@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
-public class PickGrenade : MonoBehaviour
+public class PickGrenade : Pick
 {
-    public GameObject pickGunText;
     public GameObject grenadeImage;
 
     private GrenadeThrower grenadeThrower;
@@ -40,10 +37,7 @@ public class PickGrenade : MonoBehaviour
         }
 
         if (tagOnTrigger == "Player")
-        {
-            pickGunText.GetComponentInChildren<TextMeshProUGUI>().text = "Press F To Pick " + this.gameObject.tag;
-            pickGunText.SetActive(true);
-        }
+            ShowText(this.gameObject.tag);
         else if (tagOnTrigger == "NPC")
             TakeGrenade();
 
@@ -51,7 +45,7 @@ public class PickGrenade : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        pickGunText.SetActive(false);
+        pickText.SetActive(false);
         tagOnTrigger = null;
     }
 
@@ -59,6 +53,7 @@ public class PickGrenade : MonoBehaviour
     {
         grenadeThrower.SetHaveGrenade(true);
         this.gameObject.SetActive(false);
-        pickGunText.SetActive(false);
+        pickText.SetActive(false);
+        PlaySound();
     }
 }

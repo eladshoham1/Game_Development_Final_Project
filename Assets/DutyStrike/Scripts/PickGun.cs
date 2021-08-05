@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-public class PickGun : MonoBehaviour
+public class PickGun : Pick
 {
     public GameObject weaponsInField;
-    public GameObject pickGunText;
     public GameObject target;
     public Sprite gun;
     public Image weaponImage;
@@ -45,8 +43,7 @@ public class PickGun : MonoBehaviour
 
         if (other.tag == "Player")
         {
-            pickGunText.GetComponentInChildren<TextMeshProUGUI>().text = "Press F To Pick " + this.gameObject.tag;
-            pickGunText.SetActive(true);
+            ShowText(this.gameObject.tag);
             tagOnTrigger = other.tag;
         }
         else if (other.tag == "NPC")
@@ -64,7 +61,7 @@ public class PickGun : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        pickGunText.SetActive(false);
+        pickText.SetActive(false);
         weaponsInHand = null;
         tagOnTrigger = null;
         npcTakeWeapon = false;
@@ -122,6 +119,7 @@ public class PickGun : MonoBehaviour
             weaponsInHand.transform.GetChild(i).gameObject.SetActive(this.gameObject.name == weaponsInHand.transform.GetChild(i).transform.name);
 
         this.gameObject.SetActive(false);
-        pickGunText.SetActive(false);
+        pickText.SetActive(false);
+        PlaySound();
     }
 }

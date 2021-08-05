@@ -1,12 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
-public class PickFirstAid : MonoBehaviour
+public class PickFirstAid : Pick
 {
-    public GameObject pickGunText;
-
     private GameObject objectInTrigger;
 
     // Start is called before the first frame update
@@ -21,8 +18,9 @@ public class PickFirstAid : MonoBehaviour
         if (objectInTrigger && objectInTrigger.name == "Player" && Input.GetButtonDown("GunPickBtn"))
         {
             objectInTrigger.GetComponent<Stats>().AddFirstAid();
-            pickGunText.SetActive(false);
+            pickText.SetActive(false);
             this.gameObject.SetActive(false);
+            PlaySound();
         }
     }
 
@@ -32,19 +30,19 @@ public class PickFirstAid : MonoBehaviour
 
         if (other.tag == "Player")
         {
-            pickGunText.GetComponentInChildren<TextMeshProUGUI>().text = "Press F To Pick " + this.gameObject.tag;
-            pickGunText.SetActive(true);
+            ShowText(this.gameObject.tag);
         }
-        else
+        else if (other.tag =="NPC")
         {
             objectInTrigger.GetComponent<Stats>().AddFirstAid();
             this.gameObject.SetActive(false);
+            PlaySound();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        pickGunText.SetActive(false);
+        pickText.SetActive(false);
         objectInTrigger = null;
     }
 }

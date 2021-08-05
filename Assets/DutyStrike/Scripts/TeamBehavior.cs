@@ -6,8 +6,7 @@ using TMPro;
 public class TeamBehavior : MonoBehaviour
 {
     public GameObject statusCanvas;
-    public GameObject menuCanvas;
-    public GameObject gameOverPanel;
+    public GameObject gameOverCanvas;
     public GameObject winnerStatus;
     public MouseLook cameraLook;
 
@@ -43,8 +42,7 @@ public class TeamBehavior : MonoBehaviour
                 winnerStatus.GetComponent<TextMeshProUGUI>().text = "You Win";
 
             statusCanvas.SetActive(false);
-            menuCanvas.SetActive(true);
-            gameOverPanel.SetActive(true);
+            gameOverCanvas.SetActive(true);
             cameraLook.enabled = false;
             Cursor.lockState = CursorLockMode.None;
             Time.timeScale = 0f;

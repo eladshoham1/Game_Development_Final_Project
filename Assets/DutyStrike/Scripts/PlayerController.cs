@@ -6,9 +6,9 @@ using UnityEngine.AI;
 public class PlayerController : MonoBehaviour
 {
     public Transform groundCheck;
-    public GameObject npc;
+    /*public GameObject npc;
     public GameObject npc1;
-    public GameObject npc2;
+    public GameObject npc2;*/
     public AudioClip footStep;
     public AudioClip jump;
     public AudioClip land;
@@ -45,59 +45,54 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0)
-        {
             velocity.y = -2f;
-        }
 
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * x + transform.forward * z;
 
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W))
-            currentSpeed = speed * 2f;
-        else
-            currentSpeed = speed;
+        if (Input.GetKey(KeyCode.W))
+        {
+            if (sound.clip != jump)
+                PlaySound(footStep);
+            currentSpeed = Input.GetKey(KeyCode.LeftShift) ? speed * 2f : speed;
+        }
 
-        controller.Move(move* currentSpeed * Time.deltaTime);
+        controller.Move(move * currentSpeed * Time.deltaTime);
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             sound.Stop();
-            sound.clip = jump;
-            sound.Play();
+            PlaySound(jump);
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         } 
         else if (sound.clip == jump && isGrounded)
-        {
-            sound.Stop();
-            sound.clip = land;
-            sound.Play();
-        } 
-        else
-        {
-            sound.clip = footStep;
-        }
+            PlaySound(land);
 
         velocity.y += gravity * Time.deltaTime;
-
         controller.Move(velocity * Time.deltaTime);
 
         anim.SetInteger("NPCState", prevPosition == this.transform.position ? 0 : 1);
-        if (!sound.isPlaying && anim.GetInteger("NPCState") == 1)
-        {
-            sound.Play();
-        }
 
-        if (!npc.GetComponent<NavMeshAgent>().enabled)
+        /*if (!npc.GetComponent<NavMeshAgent>().enabled)
         {
             startNPC(npc);
             startNPC(npc1);
             startNPC(npc2);
+        }*/
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (!sound.isPlaying)
+        {
+            sound.clip = clip;
+            sound.Play();
         }
     }
 
-    private void startNPC(GameObject idle)
+    /*private void startNPC(GameObject idle)
     {
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
@@ -110,5 +105,5 @@ public class PlayerController : MonoBehaviour
                 an.SetInteger("NPCState", 2);
             }
         }
-    }
+    }*/
 }
