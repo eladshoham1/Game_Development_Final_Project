@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class MenuManager : MonoBehaviour
 {
     public GameObject menuCanvas;
+    public GameObject menuPanel;
+    public GameObject gameOverPanel;
     public GameObject statusCanvas;
     public MouseLook cameraLook;
     public AudioMixer am;
@@ -99,6 +101,8 @@ public class MenuManager : MonoBehaviour
 
     public void PlayAgain()
     {
+        gameOverPanel.SetActive(false);
+        menuPanel.SetActive(true);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
