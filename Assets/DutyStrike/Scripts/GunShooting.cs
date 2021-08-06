@@ -19,7 +19,7 @@ public class GunShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Shot"))
+        if (this.transform.parent.tag == "Player" && Input.GetButtonDown("Shot"))
         {
             RaycastHit hit;
 

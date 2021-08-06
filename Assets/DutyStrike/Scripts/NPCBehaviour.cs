@@ -5,16 +5,16 @@ using UnityEngine.AI;
 
 public class NPCBehaviour : MonoBehaviour
 {
-    //public GameObject playerTeam;
-    //public GameObject aCamera;
-    //public GameObject weaponsInHand;
-    //public GameObject npc;
-    public GameObject player;
-    public GameObject leader;
-    public GameObject target;
-
     private Animator anim;
     private NavMeshAgent agent;
+
+    private GameObject player;
+
+    protected Vector3 dest;
+    protected float minX;
+    protected float maxX;
+    protected float minZ;
+    protected float maxZ;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +22,10 @@ public class NPCBehaviour : MonoBehaviour
         anim = GetComponent<Animator>();
         anim.SetInteger("NPCState", 2);
         agent = GetComponent<NavMeshAgent>();
+        agent.enabled = true;
+        dest = this.transform.position;
+        player = GameObject.FindGameObjectWithTag("Player");
+        GetFieldPosition();
     }
 
     // Update is called once per frame
@@ -29,39 +33,41 @@ public class NPCBehaviour : MonoBehaviour
     {
         if (agent.enabled)
         {
-            if (leader.GetComponent<Stats>().IsDead())
-                agent.SetDestination(target.transform.position);
-            else
-                agent.SetDestination(leader.transform.position);
+            agent.SetDestination(dest);
+            if (Vector3.Distance(this.transform.position, dest) <= 3f)
+                SetDestPosition();
+
+            if (Vector3.Distance(this.transform.position, player.transform.position) <= 5f)
+            {
+                FaceTarget(player);
+                this.GetComponent<NPCShoot>().Shoot();
+            }
         }
     }
 
-    /*private void Shoot()
+    protected void GetFieldPosition()
     {
-        for (int i = 0; i < weaponsInHand.transform.childCount; i++)
-        {
-            if (weaponsInHand.transform.GetChild(i).gameObject.activeInHierarchy)
-            {
-                for (int j = 0; j < playerTeam.transform.childCount; j++)
-                {
+        GameObject field = GameObject.FindWithTag("Field");
+        Renderer fieldSize = field.GetComponent<Renderer>();
 
-                    if (Vector3.Distance(this.gameObject.transform.position, playerTeam.transform.GetChild(j).gameObject.transform.position) < 50f)
-                    {
-                        RaycastHit hit;
+        minX = fieldSize.bounds.center.x - fieldSize.bounds.extents.x;
+        maxX = fieldSize.bounds.center.x + fieldSize.bounds.extents.x;
+        minZ = fieldSize.bounds.center.z - fieldSize.bounds.extents.z;
+        maxZ = fieldSize.bounds.center.z + fieldSize.bounds.extents.z;
+    }
 
-                        if (Physics.Raycast(aCamera.transform.position, aCamera.transform.forward, out hit))
-                        {
+    protected void SetDestPosition()
+    {
+        float x = Random.Range(minX, maxX);
+        float z = Random.Range(minZ, maxZ);
 
-                            if (hit.transform.gameObject.tag == "Player" || hit.transform.gameObject.tag == "NPC")
-                            {
-                                if (this.transform.parent.parent.parent.parent.name != hit.transform.parent.name)
-                                    hit.transform.gameObject.GetComponent<Stats>().Shot(this.transform.parent.tag);
-                            }
-                        }
-                    }
-                }
-                break;
-            }
-        }
-    }*/
+        dest = new Vector3(x, this.transform.position.y, z);
+    }
+
+    private void FaceTarget(GameObject enemy)
+    {
+        Vector3 direction = (enemy.transform.position - this.transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
+        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * 5f);
+    }
 }

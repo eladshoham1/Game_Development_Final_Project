@@ -36,11 +36,7 @@ public class TeamBehavior : MonoBehaviour
 
         if (delay >= 2f)
         {
-            if (this.name == "PlayerTeam")
-                winnerStatus.GetComponent<TextMeshProUGUI>().text = "You Lost";
-            else
-                winnerStatus.GetComponent<TextMeshProUGUI>().text = "You Win";
-
+            winnerStatus.GetComponent<TextMeshProUGUI>().text = this.name == "PlayerTeam" ? "You Lost" : "You Win";
             statusCanvas.SetActive(false);
             gameOverCanvas.SetActive(true);
             cameraLook.enabled = false;

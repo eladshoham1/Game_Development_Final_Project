@@ -51,9 +51,12 @@ public class PickGrenade : Pick
 
     void TakeGrenade()
     {
-        grenadeThrower.SetHaveGrenade(true);
-        this.gameObject.SetActive(false);
-        pickText.SetActive(false);
-        PlaySound();
+        if (grenadeThrower)
+        {
+            grenadeThrower.SetHaveGrenade(true);
+            this.gameObject.SetActive(false);
+            pickText.SetActive(false);
+            PlaySound();
+        }
     }
 }
