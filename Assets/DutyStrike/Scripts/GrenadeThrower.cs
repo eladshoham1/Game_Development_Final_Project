@@ -9,8 +9,8 @@ public class GrenadeThrower : MonoBehaviour
     public GameObject theGrenade;
     public Slider greandeTime;
 
-    private bool haveGrenade;
-    private float delay;
+    protected bool haveGrenade;
+    protected float delay;
 
     private void Start()
     {
@@ -41,7 +41,7 @@ public class GrenadeThrower : MonoBehaviour
         this.haveGrenade = haveGrenade;
     }
 
-    void throwGrenade()
+    protected void throwGrenade()
     {
         GameObject grenade = Instantiate(theGrenade, transform.position, transform.rotation);
         Rigidbody rb = grenade.GetComponent<Rigidbody>();

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCShoot : MonoBehaviour
+public class NPCAttack : MonoBehaviour
 {
     public GameObject aCamera;
     public GameObject weaponsInHand;
@@ -26,22 +26,40 @@ public class NPCShoot : MonoBehaviour
             delay = 0f;
     }
 
-    public void Shoot()
+    public void Attack()
     {
-        if (HaveWeaponInHand())
+        if (HaveWeaponInHand() && aCamera.GetComponent<GrenadeThrowerNPC>().GetHaveGrenade())
         {
-            RaycastHit hit;
-
-            if (Physics.Raycast(aCamera.transform.position, aCamera.transform.forward, out hit))
+            switch (Random.Range(0, 2))
             {
-                if (delay == 0f && (hit.transform.gameObject.tag == "Player" || hit.transform.gameObject.tag == "NPC"))
-                {
-                    StartCoroutine(ShowShot());
-                    hit.transform.gameObject.GetComponent<Stats>().Shot(this.transform.tag);
-                    delay = 1.5f;
-                }
+                case 0: GunShooting(); break;
+                case 1: ThrowGrenade(); break;
             }
         }
+        else if (HaveWeaponInHand())
+            GunShooting();
+        else if (aCamera.GetComponent<GrenadeThrowerNPC>().GetHaveGrenade())
+            ThrowGrenade();
+    }
+
+    private void GunShooting()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(aCamera.transform.position, aCamera.transform.forward, out hit))
+        {
+            if (delay == 0f && (hit.transform.gameObject.tag == "Player" || hit.transform.gameObject.tag == "NPC"))
+            {
+                StartCoroutine(ShowShot());
+                hit.transform.gameObject.GetComponent<Stats>().Shot(this.transform.tag);
+                delay = 1.5f;
+            }
+        }
+    }
+
+    private void ThrowGrenade()
+    {
+        aCamera.GetComponent<GrenadeThrowerNPC>().Throw();
     }
 
     private bool HaveWeaponInHand()
@@ -58,7 +76,7 @@ public class NPCShoot : MonoBehaviour
 
         return false;
     }
-    
+
     private void FindMuzzleFlash(GameObject weapon)
     {
         for (int i = 0; i < weapon.transform.childCount; i++)

@@ -28,6 +28,7 @@ public class PickGun : Pick
         if (tagOnTrigger == "Player" && Input.GetButtonDown("GunPickBtn"))
         {
             TakeWeapon();
+            PlaySound();
             weaponImage.sprite = gun;
             target.SetActive(true);
         }
@@ -120,6 +121,5 @@ public class PickGun : Pick
 
         this.gameObject.SetActive(false);
         pickText.SetActive(false);
-        PlaySound();
     }
 }

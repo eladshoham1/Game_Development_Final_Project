@@ -22,6 +22,7 @@ public class PickGrenade : Pick
         if (tagOnTrigger == "Player" && Input.GetButtonDown("GunPickBtn"))
         {
             TakeGrenade();
+            PlaySound();
             grenadeImage.SetActive(true);
         }
     }
@@ -33,14 +34,18 @@ public class PickGrenade : Pick
         for (int i = 0; !grenadeThrower && i < other.transform.childCount; i++)
         {
             if (other.transform.GetChild(i).gameObject.name == "Camera")
-                grenadeThrower = other.transform.GetChild(i).gameObject.GetComponent<GrenadeThrower>();
+            {
+                if (tagOnTrigger == "Player")
+                    grenadeThrower = other.transform.GetChild(i).gameObject.GetComponent<GrenadeThrower>();
+               else if (tagOnTrigger == "NPC")
+                    grenadeThrower = other.transform.GetChild(i).gameObject.GetComponent<GrenadeThrowerNPC>();
+            }
         }
 
         if (tagOnTrigger == "Player")
             ShowText(this.gameObject.tag);
         else if (tagOnTrigger == "NPC")
             TakeGrenade();
-
     }
 
     private void OnTriggerExit(Collider other)
@@ -56,7 +61,6 @@ public class PickGrenade : Pick
             grenadeThrower.SetHaveGrenade(true);
             this.gameObject.SetActive(false);
             pickText.SetActive(false);
-            PlaySound();
         }
     }
 }

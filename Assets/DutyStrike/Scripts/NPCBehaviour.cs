@@ -8,7 +8,9 @@ public class NPCBehaviour : MonoBehaviour
     private Animator anim;
     private NavMeshAgent agent;
 
-    private GameObject player;
+    public GameObject leader;
+    public GameObject enemyLeader;
+    public GameObject enemy;
 
     protected Vector3 dest;
     protected float minX;
@@ -24,7 +26,7 @@ public class NPCBehaviour : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.enabled = true;
         dest = this.transform.position;
-        player = GameObject.FindGameObjectWithTag("Player");
+
         GetFieldPosition();
     }
 
@@ -33,14 +35,25 @@ public class NPCBehaviour : MonoBehaviour
     {
         if (agent.enabled)
         {
-            agent.SetDestination(dest);
-            if (Vector3.Distance(this.transform.position, dest) <= 3f)
-                SetDestPosition();
-
-            if (Vector3.Distance(this.transform.position, player.transform.position) <= 5f)
+            if (!leader.GetComponent<Stats>().IsDead() && (this.gameObject.name == "NPC" || this.gameObject.name == "NPC2"))
+                agent.SetDestination(leader.transform.position);
+            else
             {
-                FaceTarget(player);
-                this.GetComponent<NPCShoot>().Shoot();
+                agent.SetDestination(dest);
+                if (Vector3.Distance(this.transform.position, dest) <= 3f)
+                    SetDestPosition();
+            }
+
+            if (!enemyLeader.GetComponent<Stats>().IsDead() && Vector3.Distance(this.transform.position, enemyLeader.transform.position) <= 7f)
+            {
+                FaceTarget(enemyLeader);
+                agent.SetDestination(enemyLeader.transform.position);
+                this.GetComponent<NPCAttack>().Attack();
+            } else if (!enemy.GetComponent<Stats>().IsDead() && Vector3.Distance(this.transform.position, enemy.transform.position) <= 7f)
+            {
+                FaceTarget(enemy);
+                agent.SetDestination(enemy.transform.position);
+                this.GetComponent<NPCAttack>().Attack();
             }
         }
     }
