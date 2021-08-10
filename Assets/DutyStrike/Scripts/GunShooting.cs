@@ -22,10 +22,10 @@ public class GunShooting : MonoBehaviour
         if (this.transform.parent.tag == "Player" && Input.GetButtonDown("Shot"))
         {
             RaycastHit hit;
+            StartCoroutine(ShowShot());
 
             if (Physics.Raycast(aCamera.transform.position, aCamera.transform.forward, out hit))
             {
-                StartCoroutine(ShowShot());
 
                 if (hit.transform.tag == "Player" || hit.transform.tag == "NPC")
                 {

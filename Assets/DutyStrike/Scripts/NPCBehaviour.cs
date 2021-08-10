@@ -5,18 +5,18 @@ using UnityEngine.AI;
 
 public class NPCBehaviour : MonoBehaviour
 {
-    private Animator anim;
-    private NavMeshAgent agent;
-
     public GameObject leader;
     public GameObject enemyLeader;
     public GameObject enemy;
 
-    protected Vector3 dest;
-    protected float minX;
-    protected float maxX;
-    protected float minZ;
-    protected float maxZ;
+    private Animator anim;
+    private NavMeshAgent agent;
+
+    private Vector3 dest;
+    private float minX;
+    private float maxX;
+    private float minZ;
+    private float maxZ;
 
     // Start is called before the first frame update
     void Start()
@@ -44,21 +44,17 @@ public class NPCBehaviour : MonoBehaviour
                     SetDestPosition();
             }
 
-            if (!enemyLeader.GetComponent<Stats>().IsDead() && Vector3.Distance(this.transform.position, enemyLeader.transform.position) <= 7f)
-            {
-                FaceTarget(enemyLeader);
-                agent.SetDestination(enemyLeader.transform.position);
-                this.GetComponent<NPCAttack>().Attack();
-            } else if (!enemy.GetComponent<Stats>().IsDead() && Vector3.Distance(this.transform.position, enemy.transform.position) <= 7f)
-            {
-                FaceTarget(enemy);
-                agent.SetDestination(enemy.transform.position);
-                this.GetComponent<NPCAttack>().Attack();
-            }
+            //if (this.GetComponent<NPCAttack>().HaveWeaponInHand() || this.GetComponent<NPCAttack>().HaveGrenade())
+            //{
+                if (!enemyLeader.GetComponent<Stats>().IsDead() && Vector3.Distance(this.transform.position, enemyLeader.transform.position) <= 7f)
+                    AttackEnemy(enemyLeader);
+                else if (!enemy.GetComponent<Stats>().IsDead() && Vector3.Distance(this.transform.position, enemy.transform.position) <= 7f)
+                    AttackEnemy(enemy);
+            //}
         }
     }
 
-    protected void GetFieldPosition()
+    private void GetFieldPosition()
     {
         GameObject field = GameObject.FindWithTag("Field");
         Renderer fieldSize = field.GetComponent<Renderer>();
@@ -69,7 +65,7 @@ public class NPCBehaviour : MonoBehaviour
         maxZ = fieldSize.bounds.center.z + fieldSize.bounds.extents.z;
     }
 
-    protected void SetDestPosition()
+    private void SetDestPosition()
     {
         float x = Random.Range(minX, maxX);
         float z = Random.Range(minZ, maxZ);
@@ -82,5 +78,12 @@ public class NPCBehaviour : MonoBehaviour
         Vector3 direction = (enemy.transform.position - this.transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0f, direction.z));
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * 5f);
+    }
+
+    private void AttackEnemy(GameObject enemy)
+    {
+        FaceTarget(enemy);
+        agent.SetDestination(enemy.transform.position);
+        this.GetComponent<NPCAttack>().Attack();
     }
 }

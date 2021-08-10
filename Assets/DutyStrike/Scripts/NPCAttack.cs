@@ -28,7 +28,7 @@ public class NPCAttack : MonoBehaviour
 
     public void Attack()
     {
-        if (HaveWeaponInHand() && aCamera.GetComponent<GrenadeThrowerNPC>().GetHaveGrenade())
+        if (HaveWeaponInHand() && HaveGrenade())
         {
             switch (Random.Range(0, 2))
             {
@@ -38,7 +38,7 @@ public class NPCAttack : MonoBehaviour
         }
         else if (HaveWeaponInHand())
             GunShooting();
-        else if (aCamera.GetComponent<GrenadeThrowerNPC>().GetHaveGrenade())
+        else if (HaveGrenade())
             ThrowGrenade();
     }
 
@@ -62,7 +62,7 @@ public class NPCAttack : MonoBehaviour
         aCamera.GetComponent<GrenadeThrowerNPC>().Throw();
     }
 
-    private bool HaveWeaponInHand()
+    public bool HaveWeaponInHand()
     {
         for (int i = 0; i < weaponsInHand.transform.childCount; i++)
         {
@@ -75,6 +75,11 @@ public class NPCAttack : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool HaveGrenade()
+    {
+        return aCamera.GetComponent<GrenadeThrowerNPC>().GetHaveGrenade();
     }
 
     private void FindMuzzleFlash(GameObject weapon)
