@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 using TMPro;
 
 public class Stats : MonoBehaviour
@@ -9,6 +10,8 @@ public class Stats : MonoBehaviour
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI firstAidCountText;
     public GameObject playerMessage;
+    public GameObject myCamera;
+    public GameObject friendCamera;
 
     private Animator anim;
     private float hp;
@@ -93,6 +96,14 @@ public class Stats : MonoBehaviour
         if (this.dead)
         {
             anim.SetInteger("NPCState", 4);
+
+            /*if (this.gameObject.tag == "Player")
+            {
+                friendCamera.GetComponent<Camera>().targetDisplay = 1;
+                myCamera.GetComponent<Camera>().targetDisplay = 2;
+                //myCamera.gameObject.SetActive(false);
+                //friendCamera.gameObject.SetActive(true);
+            }*/
 
             if (this.gameObject.tag == "NPC")
                 nma.enabled = false;

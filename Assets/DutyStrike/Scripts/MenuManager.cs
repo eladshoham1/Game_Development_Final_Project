@@ -4,17 +4,21 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
     public GameObject menuCanvas;
     public GameObject menuPanel;
-    public GameObject gameOverPanel;
+    public GameObject gameOverCanvas;
     public GameObject statusCanvas;
+    public TextMeshProUGUI winnerStatus;
     public MouseLook cameraLook;
     public AudioMixer am;
     public Dropdown dropdownQuality;
     public Dropdown dropdownResolution;
+    public GameObject playerTeam;
+    public GameObject enemyTeam;
 
     private bool isMenuPaused;
     private bool isFullScreen;
@@ -22,18 +26,23 @@ public class MenuManager : MonoBehaviour
     private Resolution[] rsl;
     private List<string> resolutions;
 
+    private float delay;
+
     // Start is called before the first frame update
     void Start()
     {
         isMenuPaused = true;
         isFullScreen = false;
+        FullScreenToggle();
         dropdownQuality.value = 2;
+        delay = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         ActiveMenu();
+        CheckGameOver();
     }
 
     public void Awake()
@@ -101,7 +110,7 @@ public class MenuManager : MonoBehaviour
 
     public void PlayAgain()
     {
-        gameOverPanel.SetActive(false);
+        gameOverCanvas.SetActive(false);
         menuPanel.SetActive(true);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
@@ -109,5 +118,38 @@ public class MenuManager : MonoBehaviour
     public void Exit()
     {
         Application.Quit();
+    }
+
+    private void CheckGameOver()
+    {
+        if (IsTeamDeads(playerTeam))
+            GameOver("You Lost");
+        else if (IsTeamDeads(enemyTeam))
+            GameOver("You Win");
+    }
+
+    private bool IsTeamDeads(GameObject team)
+    {
+        for (int i = 0; i < team.transform.childCount; i++)
+        {
+            if (!team.transform.GetChild(i).GetComponent<Stats>().IsDead())
+                return false;
+        }
+
+        return true;
+    }
+
+    private void GameOver(string message)
+    {
+        delay += Time.deltaTime;
+        if (delay < 2f)
+            return;
+
+        winnerStatus.GetComponent<TextMeshProUGUI>().text = message;
+        statusCanvas.SetActive(false);
+        gameOverCanvas.SetActive(true);
+        cameraLook.enabled = false;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0f;
     }
 }
