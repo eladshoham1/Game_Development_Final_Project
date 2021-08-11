@@ -26,9 +26,9 @@ public class NPCBehaviour : MonoBehaviour
         anim.SetInteger("NPCState", 2);
         agent = GetComponent<NavMeshAgent>();
         agent.enabled = true;
-        dest = this.transform.position;
 
         GetFieldPosition();
+        GenerateDest();
     }
 
     // Update is called once per frame
@@ -68,12 +68,14 @@ public class NPCBehaviour : MonoBehaviour
 
     private void SetDestPosition()
     {
-        if (!this.GetComponent<NPCAttack>().HaveWeaponInHand())
-        {
+        if (this.GetComponent<NPCAttack>().HaveWeaponInHand())
+            GenerateDest();
+        else
             GoToWeapon();
-            return;
-        }
+    }
 
+    private void GenerateDest()
+    {
         float x = Random.Range(minX, maxX);
         float z = Random.Range(minZ, maxZ);
 
@@ -82,14 +84,26 @@ public class NPCBehaviour : MonoBehaviour
 
     private void GoToWeapon()
     {
+        float distance = 0f;
+        Vector3 target = weaponsInField.transform.GetChild(0).gameObject.transform.position;
+
         for (int i = 0; i < weaponsInField.transform.childCount; i++)
         {
             if (weaponsInField.transform.GetChild(i).gameObject.activeInHierarchy)
             {
-                dest = weaponsInField.transform.GetChild(i).gameObject.transform.position;
-                break;
+                distance = Vector3.Distance(this.transform.position, weaponsInField.transform.GetChild(i).gameObject.transform.position);
+
+                if (distance < Vector3.Distance(this.transform.position, target))
+                    target = weaponsInField.transform.GetChild(i).gameObject.transform.position;
             }
         }
+
+        dest = target;
+    }
+
+    private float GetDistance(Vector3 target)
+    {
+        return Vector3.Distance(this.transform.position, target);
     }
 
     private void FaceTarget(GameObject enemy)

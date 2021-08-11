@@ -21,14 +21,17 @@ public class GrenadeThrower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!this.transform.parent.GetComponent<Stats>().IsDead() && haveGrenade && delay >= 4f && Input.GetButtonDown("ThrowGrenade"))
+        if (!this.transform.parent.GetComponent<Stats>().IsDead())
         {
-            throwGrenade();
-            delay = 0f;
-        }
+            if (haveGrenade && delay >= 4f && Input.GetButtonDown("ThrowGrenade"))
+            {
+                throwGrenade();
+                delay = 0f;
+            }
 
-        delay += Time.deltaTime;
-        greandeTime.value = delay;
+            delay += Time.deltaTime;
+            greandeTime.value = delay;
+        }
     }
 
     public bool GetHaveGrenade()
