@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class GunShooting : MonoBehaviour
 {
+    public GameObject player;
     public GameObject aCamera;
     public ParticleSystem muzzleFlash;
 
@@ -19,7 +20,7 @@ public class GunShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (this.transform.parent.tag == "Player" && Input.GetButtonDown("Shot"))
+        if (!player.GetComponent<Stats>().IsDead() && this.transform.parent.tag == "Player" && Input.GetButtonDown("Shot"))
         {
             RaycastHit hit;
             StartCoroutine(ShowShot());

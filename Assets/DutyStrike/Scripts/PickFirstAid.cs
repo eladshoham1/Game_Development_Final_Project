@@ -36,6 +36,7 @@ public class PickFirstAid : Pick
         {
             objectInTrigger.GetComponent<Stats>().AddFirstAid();
             this.gameObject.SetActive(false);
+            pickText.SetActive(false);
         }
     }
 

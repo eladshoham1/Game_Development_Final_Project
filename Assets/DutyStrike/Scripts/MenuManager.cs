@@ -19,6 +19,9 @@ public class MenuManager : MonoBehaviour
     public Dropdown dropdownResolution;
     public GameObject playerTeam;
     public GameObject enemyTeam;
+    public GameObject player;
+    public GameObject playerCamera;
+    public GameObject playerDeadCamera;
 
     private bool isMenuPaused;
     private bool isFullScreen;
@@ -61,6 +64,13 @@ public class MenuManager : MonoBehaviour
 
     void ActiveMenu()
     {
+        if (player.GetComponent<Stats>().IsDead())
+        {
+            playerCamera.SetActive(false);
+            playerDeadCamera.SetActive(true);
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
             isMenuPaused = !isMenuPaused;
 

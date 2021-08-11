@@ -2,23 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Rendering;
+using UnityEngine.UI;
 using TMPro;
 
 public class Stats : MonoBehaviour
 {
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI firstAidCountText;
-    public GameObject playerMessage;
-    public GameObject myCamera;
-    public GameObject friendCamera;
+    public GameObject profile;
 
     private Animator anim;
     private float hp;
     private int numOfFirstAids;
     private bool dead;
-    private bool deadNow;
-    private float delay;
 
     private NavMeshAgent nma;
 
@@ -35,8 +31,6 @@ public class Stats : MonoBehaviour
 
     private void Update()
     {
-        PrintMessage();
-
         if (this.tag == "Player")
         {
             if (Input.GetButtonDown("FirstAid"))
@@ -96,14 +90,7 @@ public class Stats : MonoBehaviour
         if (this.dead)
         {
             anim.SetInteger("NPCState", 4);
-
-            /*if (this.gameObject.tag == "Player")
-            {
-                friendCamera.GetComponent<Camera>().targetDisplay = 1;
-                myCamera.GetComponent<Camera>().targetDisplay = 2;
-                //myCamera.gameObject.SetActive(false);
-                //friendCamera.gameObject.SetActive(true);
-            }*/
+            profile.GetComponent<RawImage>().color = new Color32(0, 0, 0, 120);
 
             if (this.gameObject.tag == "NPC")
                 nma.enabled = false;
@@ -162,34 +149,6 @@ public class Stats : MonoBehaviour
     private void DicreaseHP(float hp, string shooter)
     {
         if (!dead)
-        {
             SetHP(this.hp - hp);
-            PlayerKilled(shooter);
-        }
-    }
-
-    private void PrintMessage()
-    {
-        if (deadNow)
-        {
-            delay += Time.deltaTime;
-
-            if (delay >= 5f)
-            {
-                playerMessage.SetActive(false);
-                deadNow = false;
-                delay = 0f;
-            }
-        }
-    }
-
-    private void PlayerKilled(string shooter)
-    {
-        if (this.IsDead())
-        {
-            playerMessage.GetComponentInChildren<TextMeshProUGUI>().text = shooter + " kill " + this.transform.name;
-            playerMessage.SetActive(true);
-            deadNow = true;
-        }
     }
 }

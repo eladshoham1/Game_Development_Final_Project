@@ -8,6 +8,7 @@ public class NPCBehaviour : MonoBehaviour
     public GameObject leader;
     public GameObject enemyLeader;
     public GameObject enemy;
+    public GameObject weaponsInField;
 
     private Animator anim;
     private NavMeshAgent agent;
@@ -44,13 +45,13 @@ public class NPCBehaviour : MonoBehaviour
                     SetDestPosition();
             }
 
-            //if (this.GetComponent<NPCAttack>().HaveWeaponInHand() || this.GetComponent<NPCAttack>().HaveGrenade())
-            //{
+            if (this.GetComponent<NPCAttack>().HaveWeaponInHand() || this.GetComponent<NPCAttack>().HaveGrenade())
+            {
                 if (!enemyLeader.GetComponent<Stats>().IsDead() && Vector3.Distance(this.transform.position, enemyLeader.transform.position) <= 7f)
                     AttackEnemy(enemyLeader);
                 else if (!enemy.GetComponent<Stats>().IsDead() && Vector3.Distance(this.transform.position, enemy.transform.position) <= 7f)
                     AttackEnemy(enemy);
-            //}
+            }
         }
     }
 
@@ -67,10 +68,28 @@ public class NPCBehaviour : MonoBehaviour
 
     private void SetDestPosition()
     {
+        if (!this.GetComponent<NPCAttack>().HaveWeaponInHand())
+        {
+            GoToWeapon();
+            return;
+        }
+
         float x = Random.Range(minX, maxX);
         float z = Random.Range(minZ, maxZ);
 
         dest = new Vector3(x, this.transform.position.y, z);
+    }
+
+    private void GoToWeapon()
+    {
+        for (int i = 0; i < weaponsInField.transform.childCount; i++)
+        {
+            if (weaponsInField.transform.GetChild(i).gameObject.activeInHierarchy)
+            {
+                dest = weaponsInField.transform.GetChild(i).gameObject.transform.position;
+                break;
+            }
+        }
     }
 
     private void FaceTarget(GameObject enemy)
