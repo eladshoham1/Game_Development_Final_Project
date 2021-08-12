@@ -10,6 +10,8 @@ public class Stats : MonoBehaviour
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI firstAidCountText;
     public GameObject profile;
+    public GameObject weaponsInField;
+    public GameObject weaponsInHand;
     public GameObject target;
 
     private Animator anim;
@@ -90,6 +92,7 @@ public class Stats : MonoBehaviour
         {
             anim.SetInteger("NPCState", 4);
             profile.GetComponent<RawImage>().color = new Color32(0, 0, 0, 120);
+            DropWeapon();
 
             if (this.gameObject.tag == "Player")
                 target.SetActive(false);
@@ -133,5 +136,33 @@ public class Stats : MonoBehaviour
     {
         if (!dead)
             SetHP(this.hp - hp);
+    }
+
+    private void DropWeapon()
+    {
+        Debug.Log("in drop");
+        for (int i = 0; i < weaponsInHand.transform.childCount; i++)
+        {
+            Debug.Log("i: " + i);
+            if (weaponsInHand.transform.GetChild(i).gameObject.activeInHierarchy)
+            {
+                Debug.Log("active");
+                weaponsInHand.transform.GetChild(i).gameObject.SetActive(false);
+                if (this.gameObject.tag == "Player")
+                    target.SetActive(false);
+
+                for (int j = 0; j < weaponsInField.transform.childCount; j++)
+                {
+                    Debug.Log("kaki weapon: " + weaponsInHand.transform.GetChild(i).gameObject.name);
+                    Debug.Log("kaki weapon field: " + weaponsInField.transform.GetChild(j).gameObject.name);
+                    if (weaponsInHand.transform.GetChild(i).gameObject.name == weaponsInField.transform.GetChild(j).gameObject.name)
+                    {
+                        weaponsInField.transform.GetChild(j).gameObject.transform.position = weaponsInHand.transform.GetChild(i).gameObject.transform.position;
+                        weaponsInField.transform.GetChild(j).gameObject.SetActive(true);
+                        return;
+                    }
+                }
+            }
+        }
     }
 }

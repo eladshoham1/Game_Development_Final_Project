@@ -34,6 +34,6 @@ public class RandomWeapons : MonoBehaviour
         float x = Random.Range(minX, maxX);
         float z = Random.Range(minZ, maxZ);
 
-        return new Vector3(x, 1f, z);
+        return new Vector3(x, 2f, z);
     }
 }

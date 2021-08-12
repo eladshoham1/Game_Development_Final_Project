@@ -32,6 +32,7 @@ public class PickGun : Pick
             weaponImage.sprite = gun;
             target.SetActive(true);
         }
+
     }
 
     private void OnTriggerEnter(Collider other)

@@ -19,6 +19,7 @@ public class ReplaceStatus : MonoBehaviour
     public Sprite pistol;
     public Sprite railGun;
     public Sprite shotgun;
+    public Sprite fist;
 
     private Stats stats;
 
@@ -54,6 +55,9 @@ public class ReplaceStatus : MonoBehaviour
                     break;
                 case "Shotgun":
                     weaponImage.sprite = shotgun;
+                    break;
+                default:
+                    weaponImage.sprite = fist;
                     break;
             }
         }
