@@ -8,6 +8,7 @@ public class GunShooting : MonoBehaviour
     public GameObject player;
     public GameObject aCamera;
     public ParticleSystem muzzleFlash;
+    public GameObject statusCanvas;
 
     private AudioSource sound;
 
@@ -20,6 +21,9 @@ public class GunShooting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!statusCanvas.activeInHierarchy)
+            return;
+
         if (!player.GetComponent<Stats>().IsDead() && this.transform.parent.tag == "Player" && Input.GetButtonDown("Shot"))
         {
             RaycastHit hit;

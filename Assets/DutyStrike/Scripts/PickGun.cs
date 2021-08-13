@@ -25,6 +25,14 @@ public class PickGun : Pick
     // Update is called once per frame
     void Update()
     {
+        if (player.GetComponent<Stats>().IsDead())
+        {
+            pickText.SetActive(false);
+            weaponsInHand = null;
+            tagOnTrigger = null;
+            return;
+        }
+
         if (tagOnTrigger == "Player" && Input.GetButtonDown("GunPickBtn"))
         {
             TakeWeapon();
@@ -32,7 +40,6 @@ public class PickGun : Pick
             weaponImage.sprite = gun;
             target.SetActive(true);
         }
-
     }
 
     private void OnTriggerEnter(Collider other)

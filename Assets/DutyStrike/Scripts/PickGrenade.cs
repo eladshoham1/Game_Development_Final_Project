@@ -7,19 +7,26 @@ public class PickGrenade : Pick
     public GameObject grenadeImage;
 
     private GrenadeThrower grenadeThrower;
-    private string tagOnTrigger;
+    private bool isPlayerInTrigger;
 
     // Start is called before the first frame update
     void Start()
     {
         grenadeThrower = null;
-        tagOnTrigger = null;
+        isPlayerInTrigger = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (tagOnTrigger == "Player" && Input.GetButtonDown("GunPickBtn"))
+        if (player.GetComponent<Stats>().IsDead())
+        {
+            pickText.SetActive(false);
+            isPlayerInTrigger = false;
+            return;
+        }
+
+        if (isPlayerInTrigger && Input.GetButtonDown("GunPickBtn"))
         {
             TakeGrenade();
             PlaySound();
@@ -29,29 +36,30 @@ public class PickGrenade : Pick
 
     private void OnTriggerEnter(Collider other)
     {
-        tagOnTrigger = other.tag;
+        isPlayerInTrigger = other.gameObject.tag == "Player";
+        grenadeThrower = null;
 
         for (int i = 0; !grenadeThrower && i < other.transform.childCount; i++)
         {
             if (other.transform.GetChild(i).gameObject.name == "Camera")
             {
-                if (tagOnTrigger == "Player")
-                    grenadeThrower = other.transform.GetChild(i).gameObject.GetComponent<GrenadeThrower>();
-               else if (tagOnTrigger == "NPC")
+                if (other.gameObject.tag == "NPC")
                     grenadeThrower = other.transform.GetChild(i).gameObject.GetComponent<GrenadeThrowerNPC>();
+                else if (other.gameObject.tag == "Player")
+                    grenadeThrower = other.transform.GetChild(i).gameObject.GetComponent<GrenadeThrower>();
             }
         }
 
-        if (tagOnTrigger == "Player")
+        if (other.gameObject.tag == "Player")
             ShowText(this.gameObject.tag);
-        else if (tagOnTrigger == "NPC")
+        else if (other.gameObject.tag == "NPC")
             TakeGrenade();
     }
 
     private void OnTriggerExit(Collider other)
     {
         pickText.SetActive(false);
-        tagOnTrigger = null;
+        isPlayerInTrigger = false;
     }
 
     void TakeGrenade()

@@ -5,6 +5,7 @@ using TMPro;
 
 public class Pick : MonoBehaviour
 {
+    public GameObject player;
     public GameObject pickText;
     public GameObject soundObject;
 

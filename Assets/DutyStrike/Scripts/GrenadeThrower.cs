@@ -8,6 +8,7 @@ public class GrenadeThrower : MonoBehaviour
     public float throwForce = 15f;
     public GameObject theGrenade;
     public Slider greandeTime;
+    public GameObject statusCanvas;
 
     protected bool haveGrenade;
     protected float delay;
@@ -21,6 +22,9 @@ public class GrenadeThrower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!statusCanvas.activeInHierarchy)
+            return;
+
         if (!this.transform.parent.GetComponent<Stats>().IsDead())
         {
             if (haveGrenade && delay >= 4f && Input.GetButtonDown("ThrowGrenade"))

@@ -15,6 +15,13 @@ public class PickFirstAid : Pick
     // Update is called once per frame
     void Update()
     {
+        if (player.GetComponent<Stats>().IsDead())
+        {
+            pickText.SetActive(false);
+            objectInTrigger = null;
+            return;
+        }
+
         if (objectInTrigger && objectInTrigger.name == "Player" && Input.GetButtonDown("GunPickBtn"))
         {
             objectInTrigger.GetComponent<Stats>().AddFirstAid();

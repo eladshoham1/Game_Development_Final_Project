@@ -11,6 +11,8 @@ public class Stats : MonoBehaviour
     public TextMeshProUGUI firstAidCountText;
     public GameObject profile;
     public GameObject target;
+    public GameObject weaponsInHand;
+    public GameObject weaponsInField;
 
     private Animator anim;
     private float hp;
@@ -90,6 +92,7 @@ public class Stats : MonoBehaviour
         {
             anim.SetInteger("NPCState", 4);
             profile.GetComponent<RawImage>().color = new Color32(0, 0, 0, 120);
+            DropWeapon();
 
             if (this.gameObject.tag == "Player")
                 target.SetActive(false);
@@ -133,5 +136,17 @@ public class Stats : MonoBehaviour
     {
         if (!dead)
             SetHP(this.hp - hp);
+    }
+
+    private void DropWeapon()
+    {
+        for (int i = 0; i < weaponsInHand.transform.childCount; i++)
+        {
+            if (weaponsInHand.transform.GetChild(i).gameObject.activeInHierarchy)
+            {
+                weaponsInHand.transform.GetChild(i).gameObject.SetActive(false);
+                return;
+            }
+        }
     }
 }
