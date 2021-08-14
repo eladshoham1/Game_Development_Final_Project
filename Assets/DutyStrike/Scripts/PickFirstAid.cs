@@ -33,6 +33,7 @@ public class PickFirstAid : Pick
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject.tag);
         objectInTrigger = other.gameObject;
 
         if (other.tag == "Player")

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GrenadeThrower : MonoBehaviour
 {
-    public float throwForce = 15f;
+    public float throwForce = 12f;
     public GameObject theGrenade;
     public Slider greandeTime;
     public GameObject statusCanvas;

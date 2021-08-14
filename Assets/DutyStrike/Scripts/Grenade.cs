@@ -9,7 +9,7 @@ public class Grenade : MonoBehaviour
 
     private float delay = 3f;
     private float radius = 7f;
-    private float force = 800f;
+    private float force = 600f;
     private float countdown;
     private bool hasExploded;
     
@@ -44,8 +44,6 @@ public class Grenade : MonoBehaviour
                 nearbyObject.GetComponent<Stats>().HurtFromGrenade();
             else if (nearbyObject.tag == "Breakable")
                 nearbyObject.GetComponent<Breakable>().Break();
-            //else if (nearbyObject.tag == "Terrain")
-                //nearbyObject.GetComponent<Terrain>().terrainData.size = new Vector3(30f, 30f, 30f);
 
             Destructible dest = nearbyObject.GetComponent<Destructible>();
             if (dest != null)

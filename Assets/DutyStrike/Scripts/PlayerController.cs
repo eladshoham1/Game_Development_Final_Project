@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject statusCanvas;
     public Transform groundCheck;
     public AudioClip footStep;
     public AudioClip jump;
@@ -34,7 +35,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GetComponent<Stats>().IsDead())
+        if (GetComponent<Stats>().IsDead() || !statusCanvas.activeInHierarchy)
             return;
 
         Vector3 prevPosition = this.transform.position;
