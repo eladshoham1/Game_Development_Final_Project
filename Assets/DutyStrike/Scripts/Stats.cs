@@ -9,6 +9,7 @@ public class Stats : MonoBehaviour
 {
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI firstAidCountText;
+    public TextMeshProUGUI hpPotionsCountText;
     public GameObject profile;
     public GameObject target;
     public GameObject weaponsInHand;
@@ -17,6 +18,7 @@ public class Stats : MonoBehaviour
     private Animator anim;
     private float hp;
     private int numOfFirstAids;
+    private int numOfHPPotion;
     private bool dead;
 
     private NavMeshAgent nma;
@@ -26,6 +28,7 @@ public class Stats : MonoBehaviour
         anim = GetComponent<Animator>();
         hp = 100f;
         numOfFirstAids = 0;
+        numOfHPPotion = 0;
         dead = false;
 
         if (this.gameObject.tag == "NPC")
@@ -34,6 +37,9 @@ public class Stats : MonoBehaviour
 
     private void Update()
     {
+        if (this.gameObject.GetComponent<Stats>().GetHP() < 40f)
+            UseHPPotion();
+
         if (this.tag == "Player")
         {
             if (Input.GetButtonDown("FirstAid"))
@@ -81,6 +87,19 @@ public class Stats : MonoBehaviour
             firstAidCountText.GetComponent<TextMeshProUGUI>().text = this.numOfFirstAids.ToString();
     }
 
+    public int GetNumOfHPPotion()
+    {
+        return this.numOfHPPotion;
+    }
+
+    public void setNumOfHPPotion(int numOfHPPotion)
+    {
+        this.numOfHPPotion = numOfHPPotion;
+
+        if (this.tag == "Player")
+            hpPotionsCountText.GetComponent<TextMeshProUGUI>().text = this.numOfHPPotion.ToString();
+    }
+
     public bool IsDead()
     {
         return this.dead;
@@ -108,12 +127,26 @@ public class Stats : MonoBehaviour
         setNumOfFirstAid(this.numOfFirstAids + 1);
     }
 
+    public void AddHPPotion()
+    {
+        setNumOfHPPotion(this.numOfHPPotion + 1);
+    }
+
     public void UseFirstAid()
     {
         if (this.numOfFirstAids > 0)
         {
             IncreaseHP(Random.Range(40, 60));
             setNumOfFirstAid(this.numOfFirstAids - 1);
+        }
+    }
+
+    public void UseHPPotion()
+    {
+        if (this.numOfHPPotion > 0)
+        {
+            IncreaseHP(Random.Range(10, 30));
+            setNumOfHPPotion(this.numOfHPPotion - 1);
         }
     }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WSMGameStudio.Behaviours;
 
 public class GunShooting : MonoBehaviour
 {
@@ -37,6 +38,8 @@ public class GunShooting : MonoBehaviour
                     if (this.transform.parent.parent.parent.parent.name != hit.transform.parent.name)
                         hit.transform.gameObject.GetComponent<Stats>().Shot(this.transform.parent.tag);
                 }
+                else if (hit.transform.tag == "Breakable")
+                    hit.transform.gameObject.GetComponent<Breakable>().Break();
             }
         }
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WSMGameStudio.Behaviours;
 
 public class Grenade : MonoBehaviour
 {
@@ -41,6 +42,10 @@ public class Grenade : MonoBehaviour
         {
             if (nearbyObject.tag == "Player" || nearbyObject.tag == "NPC")
                 nearbyObject.GetComponent<Stats>().HurtFromGrenade();
+            else if (nearbyObject.tag == "Breakable")
+                nearbyObject.GetComponent<Breakable>().Break();
+            //else if (nearbyObject.tag == "Terrain")
+                //nearbyObject.GetComponent<Terrain>().terrainData.size = new Vector3(30f, 30f, 30f);
 
             Destructible dest = nearbyObject.GetComponent<Destructible>();
             if (dest != null)

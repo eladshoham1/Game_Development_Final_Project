@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomWeapons : MonoBehaviour
+public class RandomPositions : MonoBehaviour
 {
     private float minX;
     private float maxX;
@@ -34,6 +34,6 @@ public class RandomWeapons : MonoBehaviour
         float x = Random.Range(minX, maxX);
         float z = Random.Range(minZ, maxZ);
 
-        return new Vector3(x, 2f, z);
+        return new Vector3(x, 9.5f, z);
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WSMGameStudio.Behaviours;
 
 public class NPCAttack : MonoBehaviour
 {
@@ -48,11 +49,17 @@ public class NPCAttack : MonoBehaviour
 
         if (Physics.Raycast(aCamera.transform.position, aCamera.transform.forward, out hit))
         {
-            if (delay == 0f && (hit.transform.gameObject.tag == "Player" || hit.transform.gameObject.tag == "NPC"))
+            if (delay == 0f)
             {
-                StartCoroutine(ShowShot());
-                hit.transform.gameObject.GetComponent<Stats>().Shot(this.transform.tag);
-                delay = 1.5f;
+                if (hit.transform.gameObject.tag == "Player" || hit.transform.gameObject.tag == "NPC")
+                {
+                    StartCoroutine(ShowShot());
+                    hit.transform.gameObject.GetComponent<Stats>().Shot(this.transform.tag);
+                }
+                else if (hit.transform.tag == "Breakable")
+                    hit.transform.gameObject.GetComponent<Breakable>().Break();
+                
+                delay = 2f;
             }
         }
     }
