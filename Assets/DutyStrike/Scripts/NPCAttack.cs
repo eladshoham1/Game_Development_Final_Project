@@ -57,7 +57,13 @@ public class NPCAttack : MonoBehaviour
                     hit.transform.gameObject.GetComponent<Stats>().Shot(this.transform.tag);
                 }
                 else if (hit.transform.tag == "Breakable")
+                {
+                    Destructible destructible = hit.transform.gameObject.GetComponent<Destructible>();
                     hit.transform.gameObject.GetComponent<Breakable>().Break();
+
+                    if (destructible)
+                        destructible.Destroy();
+                }
                 
                 delay = 2f;
             }

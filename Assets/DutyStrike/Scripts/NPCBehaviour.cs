@@ -36,6 +36,8 @@ public class NPCBehaviour : MonoBehaviour
     {
         if (agent.enabled)
         {
+            UpdateAnimation();
+
             if (!leader.GetComponent<Stats>().IsDead() && (this.gameObject.name == "NPC" || this.gameObject.name == "NPC2"))
                 agent.SetDestination(leader.transform.position);
             else
@@ -64,6 +66,11 @@ public class NPCBehaviour : MonoBehaviour
         maxX = fieldSize.bounds.center.x + fieldSize.bounds.extents.x;
         minZ = fieldSize.bounds.center.z - fieldSize.bounds.extents.z;
         maxZ = fieldSize.bounds.center.z + fieldSize.bounds.extents.z;
+    }
+
+    private void UpdateAnimation()
+    {
+        anim.SetInteger("NPCState", agent.velocity.magnitude > 0.1f ? 2 : 0);
     }
 
     private void SetDestPosition()

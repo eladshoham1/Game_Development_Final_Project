@@ -39,7 +39,13 @@ public class GunShooting : MonoBehaviour
                         hit.transform.gameObject.GetComponent<Stats>().Shot(this.transform.parent.tag);
                 }
                 else if (hit.transform.tag == "Breakable")
+                {
+                    Destructible destructible = hit.transform.gameObject.GetComponent<Destructible>();
                     hit.transform.gameObject.GetComponent<Breakable>().Break();
+
+                    if (destructible)
+                        destructible.Destroy();
+                }
             }
         }
     }

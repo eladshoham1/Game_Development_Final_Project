@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RandomPositions : MonoBehaviour
 {
+    private GameObject[] noItemsFields;
     private float minX;
     private float maxX;
     private float minZ;
@@ -13,6 +14,7 @@ public class RandomPositions : MonoBehaviour
     void Start()
     {
         GetFieldSize();
+        GetNoItemsFields();
 
         for (int i = 0; i < this.transform.childCount; i++)
             this.transform.GetChild(i).transform.position = GetRandomPositin();
@@ -29,11 +31,40 @@ public class RandomPositions : MonoBehaviour
         maxZ = fieldSize.bounds.center.z + fieldSize.bounds.extents.z;
     }
 
-    Vector3 GetRandomPositin()
+    private void GetNoItemsFields()
     {
-        float x = Random.Range(minX, maxX);
-        float z = Random.Range(minZ, maxZ);
+        noItemsFields = GameObject.FindGameObjectsWithTag("No Items Field");
+    }
+
+    private Vector3 GetRandomPositin()
+    {
+        float x, z;
+
+        do
+        {
+            x = Random.Range(minX, maxX);
+            z = Random.Range(minZ, maxZ);
+        }
+        while (IsInNoItemsField(x, z));
 
         return new Vector3(x, 9.5f, z);
+    }
+
+    private bool IsInNoItemsField(float x, float z)
+    {
+        Renderer noItemsfieldSize = null;
+
+        for (int i = 0; i < noItemsFields.Length; i++)
+        {
+            noItemsfieldSize = noItemsFields[i].GetComponent<Renderer>();
+
+            if (x > noItemsfieldSize.bounds.center.x - noItemsfieldSize.bounds.extents.x &&
+                x < noItemsfieldSize.bounds.center.x + noItemsfieldSize.bounds.extents.x &&
+                z > noItemsfieldSize.bounds.center.z - noItemsfieldSize.bounds.extents.z &&
+                z < noItemsfieldSize.bounds.center.z + noItemsfieldSize.bounds.extents.z)
+                return true;
+        }
+
+        return false;
     }
 }

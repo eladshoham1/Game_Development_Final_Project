@@ -17,9 +17,9 @@ public class GrenadeSound : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(GameObject.FindGameObjectsWithTag("ThrowerGrenade").Length !=0)
+        if (GameObject.FindGameObjectsWithTag("ThrowerGrenade").Length !=0)
             delay += Time.deltaTime;
-        if (delay >= 3f)
+        if (delay >= 2.85f)
         {
             sound.Play();
             delay = 0f;
