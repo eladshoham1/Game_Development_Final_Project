@@ -44,7 +44,7 @@ public class Grenade : MonoBehaviour
                 nearbyObject.GetComponent<Stats>().HurtFromGrenade();
             else if (nearbyObject.tag == "Breakable")
                 nearbyObject.GetComponent<Breakable>().Break();
-            else if (nearbyObject.tag == "Terrain")
+            else if (nearbyObject.tag == "Terrain" && this.transform.position.y - nearbyObject.transform.position.y < 11f)
                 nearbyObject.GetComponent<TerrainDamager>().ApplyDamage(this.transform.position);
 
             Destructible dest = nearbyObject.GetComponent<Destructible>();
