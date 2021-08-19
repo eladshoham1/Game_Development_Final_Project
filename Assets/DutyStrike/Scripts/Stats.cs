@@ -10,6 +10,8 @@ public class Stats : MonoBehaviour
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI firstAidCountText;
     public TextMeshProUGUI hpPotionsCountText;
+    public GameObject usingFirstAidText;
+    public GameObject firstAidSound;
     public GameObject profile;
     public GameObject target;
     public GameObject weaponsInHand;
@@ -20,7 +22,7 @@ public class Stats : MonoBehaviour
     private int numOfFirstAids;
     private int numOfHPPotion;
     private bool dead;
-
+    private float firstAidTextDelay;
     private NavMeshAgent nma;
 
     void Start()
@@ -30,6 +32,7 @@ public class Stats : MonoBehaviour
         numOfFirstAids = 0;
         numOfHPPotion = 0;
         dead = false;
+        firstAidTextDelay = 0f;
 
         if (this.gameObject.tag == "NPC")
             nma = GetComponent<NavMeshAgent>();
@@ -44,6 +47,14 @@ public class Stats : MonoBehaviour
         {
             if (Input.GetButtonDown("FirstAid"))
                 UseFirstAid();
+
+            if (firstAidTextDelay >= 3f)
+            {
+                usingFirstAidText.SetActive(false);
+                firstAidTextDelay = 0f;
+            }
+            else if (firstAidTextDelay > 0f)
+                firstAidTextDelay += Time.deltaTime;
         }
         else if (this.gameObject.GetComponent<Stats>().GetHP() < 50f)
             UseFirstAid();
@@ -136,8 +147,13 @@ public class Stats : MonoBehaviour
     {
         if (this.numOfFirstAids > 0)
         {
+            firstAidSound.GetComponent<AudioSource>().Play();
             IncreaseHP(Random.Range(40, 60));
             setNumOfFirstAid(this.numOfFirstAids - 1);
+        } else if (this.gameObject.name == "Player")
+        {
+            usingFirstAidText.SetActive(true);
+            firstAidTextDelay = 0.1f;
         }
     }
 
