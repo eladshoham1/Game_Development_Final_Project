@@ -8,7 +8,6 @@ public class TerrainDamager : MonoBehaviour
 	private float[,] originalHeightmap;
 	private float[,] heightmap;
 	private float[,,] splatMaps;
-	
 
 	void Start()
 	{
@@ -54,7 +53,10 @@ public class TerrainDamager : MonoBehaviour
 		int zMax = (int)(terrainCell.z + holeRadius);
 
 		int iHoleRadius = (int)holeRadius;
-		if (iHoleRadius < 1) iHoleRadius = 1;
+		if (iHoleRadius < 1) 
+			iHoleRadius = 1;
+
+		int iHoleRadiusSquaredDivider = iHoleRadius * iHoleRadius * 2;
 
 		int dz = -iHoleRadius;
 		for (int z = zMin; z <= zMax; z++, dz++)
@@ -64,7 +66,15 @@ public class TerrainDamager : MonoBehaviour
 			{
 				if (z >= 0 && z < heightmap.GetLength(0) && x >= 0 && x < heightmap.GetLength(1))
 				{
-					var heightSample = heightmap[z, x] + baseAdjustment;
+					float fraction = 1.0f;
+					int offCenter = dx * dx + dz * dz;
+					if (offCenter >= iHoleRadiusSquaredDivider) 
+						offCenter = iHoleRadiusSquaredDivider;
+					fraction = (iHoleRadiusSquaredDivider - offCenter) / (float)iHoleRadiusSquaredDivider;
+
+					float adjustment = baseAdjustment * fraction;
+
+					var heightSample = heightmap[z, x] + adjustment;
 
 					if (heightSample < originalHeightmap[z, x] - maxHeightmapAdjustment)
 						heightSample = originalHeightmap[z, x] - maxHeightmapAdjustment;
@@ -76,7 +86,7 @@ public class TerrainDamager : MonoBehaviour
 					if (z < splatMaps.GetLength(0) && x < splatMaps.GetLength(1))
 					{
 						for (int k = 0; k < splatMaps.GetLength(2); k++)
-							splatMaps[z, x, k] = 0.5f;
+							splatMaps[z, x, k] = 0.35f;
 					}
 				}
 			}

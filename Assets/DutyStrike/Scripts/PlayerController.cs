@@ -53,7 +53,17 @@ public class PlayerController : MonoBehaviour
         {
             if (sound.clip != jump)
                 PlaySound(footStep);
-            currentSpeed = Input.GetKey(KeyCode.LeftShift) ? speed * 2f : speed;
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                currentSpeed = speed * 2f;
+                sound.pitch = 2f;
+            }
+            else
+            {
+                currentSpeed = speed;
+                sound.pitch = 1f;
+            }
         }
 
         controller.Move(move * currentSpeed * Time.deltaTime);
