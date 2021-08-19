@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class NPCBehaviour : MonoBehaviour
 {
+    public GameObject player;
     public GameObject leader;
     public GameObject enemyLeader;
     public GameObject enemy;
@@ -23,9 +24,9 @@ public class NPCBehaviour : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        anim.SetInteger("NPCState", 2);
+        anim.SetInteger("NPCState", 0);
         agent = GetComponent<NavMeshAgent>();
-        agent.enabled = true;
+        agent.enabled = false;
 
         GetFieldPosition();
         GenerateDest();
@@ -34,6 +35,9 @@ public class NPCBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player.GetComponent<PlayerController>().IsStartWalk() && !this.GetComponent<Stats>().IsDead())
+            agent.enabled = true;
+
         if (agent.enabled)
         {
             UpdateAnimation();
@@ -70,7 +74,10 @@ public class NPCBehaviour : MonoBehaviour
 
     private void UpdateAnimation()
     {
-        anim.SetInteger("NPCState", agent.velocity.magnitude > 0.1f ? 2 : 0);
+        if (agent.velocity.magnitude < 0.05f)
+            anim.SetInteger("NPCState", this.GetComponent<NPCAttack>().HaveWeaponInHand() ? 1 : 0);
+        else
+            anim.SetInteger("NPCState", this.GetComponent<NPCAttack>().HaveWeaponInHand() ? 3 : 2);
     }
 
     private void SetDestPosition()

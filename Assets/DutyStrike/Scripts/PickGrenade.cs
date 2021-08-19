@@ -43,7 +43,7 @@ public class PickGrenade : Pick
         {
             if (other.transform.GetChild(i).gameObject.name == "Camera")
             {
-                if (other.gameObject.tag == "NPC")
+                if (other.gameObject.tag == "NPC" && !other.gameObject.GetComponent<Stats>().IsDead())
                     grenadeThrower = other.transform.GetChild(i).gameObject.GetComponent<GrenadeThrowerNPC>();
                 else if (other.gameObject.tag == "Player")
                     grenadeThrower = other.transform.GetChild(i).gameObject.GetComponent<GrenadeThrower>();
@@ -52,7 +52,7 @@ public class PickGrenade : Pick
 
         if (other.gameObject.tag == "Player")
             ShowText(this.gameObject.tag);
-        else if (other.gameObject.tag == "NPC")
+        else if (other.gameObject.tag == "NPC" && !other.gameObject.GetComponent<Stats>().IsDead())
             TakeGrenade();
     }
 

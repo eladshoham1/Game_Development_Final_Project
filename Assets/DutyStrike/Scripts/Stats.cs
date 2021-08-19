@@ -177,8 +177,17 @@ public class Stats : MonoBehaviour
         {
             if (weaponsInHand.transform.GetChild(i).gameObject.activeInHierarchy)
             {
-                weaponsInHand.transform.GetChild(i).gameObject.SetActive(false);
-                return;
+                for (int j = 0; j < weaponsInField.transform.childCount; j++)
+                {
+                    if (weaponsInHand.transform.GetChild(i).gameObject.name == weaponsInField.transform.GetChild(j).gameObject.name)
+                    {
+                        weaponsInHand.transform.GetChild(i).gameObject.SetActive(false);
+                        weaponsInField.transform.GetChild(j).gameObject.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 1f, this.transform.position.z);
+                        weaponsInField.transform.GetChild(j).gameObject.SetActive(true);
+                        return;
+                    }
+                }
+
             }
         }
     }

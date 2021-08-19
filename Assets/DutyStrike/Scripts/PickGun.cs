@@ -55,7 +55,7 @@ public class PickGun : Pick
             ShowText(this.gameObject.tag);
             tagOnTrigger = other.tag;
         }
-        else if (other.tag == "NPC")
+        else if (other.tag == "NPC" && !other.gameObject.GetComponent<Stats>().IsDead())
         {
             for (int i = 0; i < weaponsInHand.transform.childCount; i++)
             {

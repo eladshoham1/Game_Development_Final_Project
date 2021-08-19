@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     private AudioSource sound;
     private Animator anim;
+    private bool startWalk;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         sound = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
+        startWalk = false;
     }
 
     // Update is called once per frame
@@ -51,6 +53,8 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
+            this.startWalk = true;
+
             if (sound.clip != jump)
                 PlaySound(footStep);
 
@@ -90,5 +94,10 @@ public class PlayerController : MonoBehaviour
             sound.clip = clip;
             sound.Play();
         }
+    }
+
+    public bool IsStartWalk()
+    {
+        return this.startWalk;
     }
 }

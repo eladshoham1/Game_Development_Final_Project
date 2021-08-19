@@ -39,7 +39,7 @@ public class PickPotion : Pick
         {
             ShowText(this.gameObject.tag);
         }
-        else if (other.tag == "NPC")
+        else if (other.tag == "NPC" && !other.gameObject.GetComponent<Stats>().IsDead())
         {
             objectInTrigger.GetComponent<Stats>().AddHPPotion();
             this.gameObject.SetActive(false);

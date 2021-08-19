@@ -5,6 +5,7 @@ using WSMGameStudio.Behaviours;
 
 public class NPCAttack : MonoBehaviour
 {
+    public GameObject friend;
     public GameObject aCamera;
     public GameObject weaponsInHand;
 
@@ -49,6 +50,9 @@ public class NPCAttack : MonoBehaviour
 
         if (Physics.Raycast(aCamera.transform.position, aCamera.transform.forward, out hit))
         {
+            if (hit.transform.gameObject.name == friend.gameObject.name)
+                return;
+
             if (delay == 0f)
             {
                 if (hit.transform.gameObject.tag == "Player" || hit.transform.gameObject.tag == "NPC")
