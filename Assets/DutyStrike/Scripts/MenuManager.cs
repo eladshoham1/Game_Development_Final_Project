@@ -10,6 +10,8 @@ public class MenuManager : MonoBehaviour
 {
     public GameObject menuCanvas;
     public GameObject menuPanel;
+    public GameObject playButton;
+    public GameObject resetButton;
     public GameObject gameOverCanvas;
     public GameObject statusCanvas;
     public TextMeshProUGUI winnerStatus;
@@ -23,17 +25,18 @@ public class MenuManager : MonoBehaviour
     public GameObject playerCamera;
     public GameObject playerDeadCamera;
 
-    private bool isMenuPaused;
-    private bool isFullScreen;
 
     private Resolution[] rsl;
     private List<string> resolutions;
-
+    private bool isGameStarted;
+    private bool isMenuPaused;
+    private bool isFullScreen;
     private float delay;
 
     // Start is called before the first frame update
     void Start()
     {
+        isGameStarted = false;
         isMenuPaused = true;
         isFullScreen = false;
         FullScreenToggle();
@@ -71,29 +74,21 @@ public class MenuManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (isGameStarted && Input.GetKeyDown(KeyCode.Escape))
             isMenuPaused = !isMenuPaused;
 
-        if (isMenuPaused)
-        {
-            menuCanvas.SetActive(true);
-            statusCanvas.SetActive(false);
-            cameraLook.enabled = false;
-            Cursor.lockState = CursorLockMode.None;
-            Time.timeScale = 0f;
-        }
-        else
-        {
-            menuCanvas.SetActive(false);
-            statusCanvas.SetActive(true);
-            cameraLook.enabled = true;
-            Cursor.lockState = CursorLockMode.Locked;
-            Time.timeScale = 1f;
-        }
+        menuCanvas.SetActive(isMenuPaused);
+        statusCanvas.SetActive(!isMenuPaused);
+        cameraLook.enabled = !isMenuPaused;
+        Cursor.lockState = isMenuPaused ? CursorLockMode.None : CursorLockMode.Locked;
+        Time.timeScale = isMenuPaused ? 0f : 1f;
     }
 
     public void Play()
     {
+        playButton.SetActive(false);
+        resetButton.SetActive(true);
+        isGameStarted = true;
         isMenuPaused = false;
     }
 

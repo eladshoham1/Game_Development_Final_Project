@@ -62,11 +62,13 @@ public class PlayerController : MonoBehaviour
             {
                 currentSpeed = speed * 2f;
                 sound.pitch = 2f;
+                anim.speed = 2f;
             }
             else
             {
                 currentSpeed = speed;
                 sound.pitch = 1f;
+                anim.speed = 1f;
             }
         }
 

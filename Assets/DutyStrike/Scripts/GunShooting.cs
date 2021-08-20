@@ -11,11 +11,13 @@ public class GunShooting : MonoBehaviour
     public ParticleSystem muzzleFlash;
     public GameObject statusCanvas;
 
+    private GameObject arena;
     private AudioSource sound;
 
     // Start is called before the first frame update
     void Start()
     {
+        arena = GameObject.FindGameObjectWithTag("Arena");
         sound = GetComponent<AudioSource>();
     }
 
