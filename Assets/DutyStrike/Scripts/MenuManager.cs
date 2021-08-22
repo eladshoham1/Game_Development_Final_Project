@@ -71,7 +71,6 @@ public class MenuManager : MonoBehaviour
         {
             playerCamera.SetActive(false);
             playerDeadCamera.SetActive(true);
-            return;
         }
 
         if (isGameStarted && Input.GetKeyDown(KeyCode.Escape))

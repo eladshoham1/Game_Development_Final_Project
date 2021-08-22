@@ -43,7 +43,11 @@ public class NPCBehaviour : MonoBehaviour
             UpdateAnimation();
 
             if (!leader.GetComponent<Stats>().IsDead() && (this.gameObject.name == "NPC" || this.gameObject.name == "NPC2"))
+            {
                 agent.SetDestination(leader.transform.position);
+                if (agent.velocity.magnitude == 0f)
+                    SetDestPosition();
+            }
             else
             {
                 agent.SetDestination(dest);

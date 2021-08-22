@@ -4,25 +4,24 @@ using UnityEngine;
 
 public class GrenadeSound : MonoBehaviour
 {
-    private float delay;
     private AudioSource sound;
+    private bool isGrenadeExplosion;
+
     // Start is called before the first frame update
-    
     void Start()
     {
-        delay = 0f;
         sound = GetComponent<AudioSource>();
+        isGrenadeExplosion = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GameObject.FindGameObjectsWithTag("ThrowerGrenade").Length !=0)
-            delay += Time.deltaTime;
-        if (delay >= 2.85f)
+        if (!isGrenadeExplosion && GameObject.FindGameObjectWithTag("Grenade Explosion"))
         {
             sound.Play();
-            delay = 0f;
-        }
+            isGrenadeExplosion = true;
+        } else if (!GameObject.FindGameObjectWithTag("Grenade Explosion"))
+            isGrenadeExplosion = false;
     }
 }
