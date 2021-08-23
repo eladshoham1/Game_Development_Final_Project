@@ -6,6 +6,7 @@ using WSMGameStudio.Behaviours;
 public class Grenade : MonoBehaviour
 {
     public GameObject explpsionEffect;
+    private GameObject grenadeSound;
 
     private float delay = 3f;
     private float radius = 7f;
@@ -16,6 +17,7 @@ public class Grenade : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        grenadeSound = GameObject.FindGameObjectWithTag("Grenade Sound");
         countdown = delay;
         hasExploded = false;
     }
@@ -34,6 +36,7 @@ public class Grenade : MonoBehaviour
 
     void explode()
     {
+        grenadeSound.GetComponent<AudioSource>().Play();
         Instantiate(explpsionEffect, transform.position, transform.rotation);
 
         Collider[] collidersToDestroy = Physics.OverlapSphere(transform.position, radius);

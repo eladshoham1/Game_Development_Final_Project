@@ -32,9 +32,6 @@ namespace WSMGameStudio.Behaviours
             _rigidBody = GetComponent<Rigidbody>();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public void Break()
         {
             if (_breakSFX != null)
@@ -42,11 +39,9 @@ namespace WSMGameStudio.Behaviours
 
             _rigidBody.isKinematic = true;
 
-            //Disable collider to avoid collision with spawned broken pieces
             if (_collider != null)
                 _collider.enabled = false;
 
-            //Make object dissapear
             _renderer.enabled = false;
 
             foreach (var piece in brokenPieces)
@@ -82,10 +77,6 @@ namespace WSMGameStudio.Behaviours
             Destroy(this.gameObject);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="collision"></param>
         private void OnCollisionEnter(Collision collision)
         {
             if (breakOnCollision)
